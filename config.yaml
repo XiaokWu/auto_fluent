@@ -1,0 +1,31 @@
+simulation_name : 'modifued_gemo_Pd=7'
+
+#The simualtion is on server or not
+on_server : True
+#Number of cores in use
+core_number : 40
+
+folders:
+  mesh_folder : 'mesh'
+  ini_case_folder : 'ini_case'
+  jou_folder : "jurnal"
+  result_folder : 'result'
+  output_folder : 'outputs'
+  case_folder : 'case'
+
+
+simluation_parameters:
+  Re : [100,200,300,400,500,600,700,800,900,1000]
+  massflow : [2, 3, 4, 5, 6, 7, 8, 9, 10]
+  heatsink : ['1','2']
+  heatflux : [100000]
+
+
+geometry:
+  inlet_area : 312e-6
+  characteristic_length : 0.002
+  base_area : 0.0005
+  inlet_position : -3.900000080e-02
+  outlet_position : 6.100000000e-02
+
+output_features : ['heatsink', 'Re', "inlet_velocity", "outlet_avg_temperature", "heatsink_avg_temperature", 'heatsink_max_temperature','inlet_avg_temperature','outlet_avg_pressure','inlet_avg_pressure']
