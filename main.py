@@ -1,8 +1,10 @@
+import os
+os.system('source ./venv/bin/activate')
+
 # import DataProcess 
 import RunSimulation
 
-
-if __name__=="__main__":
-    RunSimulation.RunSimulation()
-    # DataProcess.DataProcess()
+os.system('pip install -r requirements.txt')
+RunSimulation.RunSimulation()
+# DataProcess.DataProcess()
     

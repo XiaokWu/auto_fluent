@@ -3,7 +3,7 @@ simulation_name : 'test'
 #The simualtion is on server or not
 on_server : True
 #Number of cores in use
-core_number : 40
+core_number : 5
 #system type
 os_name : 'linux'
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
@@ -18,9 +18,9 @@ folders:
 
 
 simluation_parameters:
-  Re : [100,200,300,400,500,600,700,800,900,1000]
-  massflow : [2, 3, 4, 5, 6, 7, 8, 9, 10]
-  heatsink : ['1','2']
+  Re : [100]
+  massflow : [2]
+  heatsink : ['1']
   heatflux : [100000]
   fluid : 'water'
 

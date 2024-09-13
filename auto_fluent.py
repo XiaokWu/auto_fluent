@@ -1,7 +1,5 @@
 import os
 import subprocess
-import pandas as pd
-import numpy as np
 
 
 class AutoFluent:
@@ -464,7 +462,7 @@ class AutoFluent:
                         result_file_case = f"case_{case},{flow['name']}={flow_para}"
                         result_file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.result_folder, result_file_case)
                         jul = f"""  
-/file/read-case "{ini_case}"
+/file/read-case "{ini_case}.cas.h5"
 /define/boundary-conditions/velocity-inlet inlet yes velocity yes {velocity}
 /solve/initialize/hyb-initialization
 /solve/iterate 5
@@ -480,8 +478,6 @@ file/write-case-data {result_file_path}.cas
                         
                         
         def runSim_case(self, flow_variable, case_name, core_num, os_name, fluent_path = None):
-            os.chdir(self.autofluent.simulation_name)
-            os.chdir(self.autofluent.jou_folder)
             #运行Fluent
             for case in case_name:
                 print(f'####################### case_{case} #########################')
