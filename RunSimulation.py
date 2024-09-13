@@ -1,6 +1,5 @@
 import liquids as liq
 from auto_fluent import AutoFluent
-from DataKit import DataLoader
 import numpy as np
 import yaml
 
@@ -10,6 +9,7 @@ with open('config.yaml', 'r') as file:
 simulation_name = config['simulation_name']
 on_server = config['on_server']
 core_number = config['core_number']
+os_name = config['os_name']
 
 folders = config['folders']
 mesh_folder = folders['mesh_folder']
@@ -24,16 +24,16 @@ Re = simulation_parameters['Re']
 massflow = simulation_parameters['massflow']
 heatsink = simulation_parameters['heatsink']
 heatflux = simulation_parameters['heatflux']
+fluid_name = simulation_parameters['fluid']
 
 geometry = config['geometry']
 inlet_area = float(geometry['inlet_area'])
-characteristic_length = geometry['D']
+characteristic_length = geometry['characteristic_length']
 inlet_position = geometry['inlet_position']
 outlet_position = geometry['outlet_position']
 
 output_features = config['output_features']
-
-fluid = liq.Water()
+fluid = liq.Extract_fluid(fluid_name)
 
 def Extract_BC():
     dct_Re = {
@@ -77,7 +77,5 @@ def RunSimulation():
     
     fluent.joural_gen_case(heatsink, lst_flow_varibles)
     fluent.runSim_case(lst_flow_varibles, heatsink, core_number)
-
-    dataloder = DataLoader(inlet_position, outlet_position, output_features, output_folder)
 
 

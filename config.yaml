@@ -1,9 +1,11 @@
-simulation_name : 'modifued_gemo_Pd=7'
+simulation_name : 'modifued_gemo_Pd=.7'
 
 #The simualtion is on server or not
-on_server : True
+on_server : False
 #Number of cores in use
 core_number : 40
+#system type
+os_name : 'win'
 
 folders:
   mesh_folder : 'mesh'
@@ -19,6 +21,7 @@ simluation_parameters:
   massflow : [2, 3, 4, 5, 6, 7, 8, 9, 10]
   heatsink : ['1','2']
   heatflux : [100000]
+  fluid : 'water'
 
 
 geometry:

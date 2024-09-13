@@ -21,3 +21,31 @@ class Oil(Liquid):
 class Mercury(Liquid):
     def __init__(self):
         super().__init__(13500.0, 0.001, 0.025, 140.0, 8.5)
+
+def Extract_fluid(name_fluid):
+    dct_water = {
+        'name': ['water', 'H2O', 'Water'],
+        'val' : Water()
+    }
+
+    dct_air = {
+        'name': ['air', 'Air'],
+        'val' : Air()
+    }
+
+    dct_oil = {
+        'name': ['oil', 'Oil'],
+        'val' : Oil()
+    }
+
+    dct_mercury = {
+        'name': ['mercury', 'Mercury'],
+        'val' : Mercury()
+    }
+    
+    lst_fluids = [dct_water, dct_air, dct_oil, dct_mercury]
+    for dct in lst_fluids:
+        if name_fluid in dct['name']:
+            return dct['val']
+    
+    
