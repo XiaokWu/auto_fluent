@@ -10,6 +10,7 @@ simulation_name = config['simulation_name']
 on_server = config['on_server']
 core_number = config['core_number']
 os_name = config['os_name']
+fluent_path = config['fluent_path']
 
 folders = config['folders']
 mesh_folder = folders['mesh_folder']
@@ -76,6 +77,6 @@ def RunSimulation():
     
     
     fluent.joural_gen_case(heatsink, lst_flow_varibles)
-    fluent.runSim_case(lst_flow_varibles, heatsink, core_number)
+    fluent.runSim_case(lst_flow_varibles, heatsink, core_number, os_name, fluent_path)
 
 

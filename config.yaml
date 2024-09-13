@@ -1,11 +1,12 @@
-simulation_name : 'modifued_gemo_Pd=.7'
+simulation_name : 'test'
 
 #The simualtion is on server or not
-on_server : False
+on_server : True
 #Number of cores in use
 core_number : 40
 #system type
-os_name : 'win'
+os_name : 'linux'
+fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 
 folders:
   mesh_folder : 'mesh'

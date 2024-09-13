@@ -45,6 +45,30 @@ class AutoFluent:
             # 如果是文件夹，递归删除文件夹及其内容
             elif os.path.isdir(file_path):
                 os.rmdir(file_path)  # 注意这只会删除空文件夹，如果需要删除非空文件夹，需要使用 shutil.rmtree
+                
+    def runSimulation(self, flow_variable, case_name, core_num, os_name):
+        os.chdir(self.simulation_name)
+        os.chdir(self.jou_folder)
+        #运行Fluent
+        for case in case_name:
+            print(f'####################### case_{case} #########################')
+            for flow in flow_variable:
+                print(f"############# 当前变量：{flow['name']} ################")
+                for flow_para in flow['val']:
+                    file_name = f"case_{case},{flow['name']}={flow_para}.jou"
+                    if os_name == 'Windows':
+                        # 构建 Fluent 命令
+                        command = f"Fluent 3ddp -t{core_num} -wait -i {file_name}"
+                    else:
+                        # 构建 Fluent 命令
+                        command = f"fluent 3ddp -t{core_num} -wait -i {file_name}"
+                    # 执行 Fluent 命令
+                    subprocess.run(command, shell=True)
+                    print(f"case_{case},{flow['name']}={flow_para} solved")
+
+        print("Fluent 命令执行完毕。")
+        os.chdir(os.path.dirname(os.getcwd()))
+        self.clear_folder(self.jou_folder)
             
     class Local:
         def __init__(self, autofluent) -> None:
@@ -418,26 +442,8 @@ class AutoFluent:
                         print(f"journal文件已生成到 {file_path} 文件夹中。")
                         i+=1
             
-        def runSim_case(self, flow_variable, case_name, core_num):
-            os.chdir(self.autofluent.simulation_name)
-            os.chdir(self.autofluent.jou_folder)
-            #运行Fluent
-            for case in case_name:
-                print(f'####################### case_{case} #########################')
-                for flow in flow_variable:
-                    print(f"############# 当前变量：{flow['name']} ################")
-                    for flow_para in flow['val']:
-                        file_name = f"case_{case},{flow['name']}={flow_para}.jou"
-
-                        # 构建 Fluent 命令
-                        command = f"Fluent 3ddp -t{core_num} -wait -i {file_name}"
-                        # 执行 Fluent 命令
-                        subprocess.run(command, shell=True)
-                        print(f"case_{case},{flow['name']}={flow_para} solved")
-
-            print("Fluent 命令执行完毕。")
-            os.chdir(os.path.dirname(os.getcwd()))
-            self.autofluent.clear_folder(self.autofluent.jou_folder)
+        def runSim_case(self, flow_variable, case_name, core_num, os_name):
+            self.autofluent.runSimulation(flow_variable, case_name, core_num, os_name)
 
     class Server:
         def __init__(self, autofluent) -> None:
@@ -459,11 +465,9 @@ class AutoFluent:
                         result_file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.result_folder, result_file_case)
                         jul = f"""  
 /file/read-case "{ini_case}"
-/define/boundary-conditions/velocity-inlet velocity-inlet-name yes velocity yes {velocity}
-/solve/set/number-of-timesteps 300
+/define/boundary-conditions/velocity-inlet inlet yes velocity yes {velocity}
 /solve/initialize/hyb-initialization
-/solve/set/residuals 1e-6
-/solve/iterate 1000
+/solve/iterate 5
 file/write-case-data {result_file_path}.cas
 /file/write-data "{result_file_path}.dat"
 /exit yes
@@ -475,7 +479,7 @@ file/write-case-data {result_file_path}.cas
                         i+=1
                         
                         
-        def runSim_case(self, flow_variable, case_name, core_num):
+        def runSim_case(self, flow_variable, case_name, core_num, os_name, fluent_path = None):
             os.chdir(self.autofluent.simulation_name)
             os.chdir(self.autofluent.jou_folder)
             #运行Fluent
@@ -485,11 +489,17 @@ file/write-case-data {result_file_path}.cas
                     print(f"############# 当前变量：{flow['name']} ################")
                     for flow_para in flow['val']:
                         file_name = f"case_{case},{flow['name']}={flow_para}.jou"
-
-                        # 构建 Fluent 命令
-                        command = f"Fluent 3ddp -t{core_num} -wait -i {file_name}"
-                        # 执行 Fluent 命令
-                        subprocess.run(command, shell=True)
+                        if os_name == 'Windows':
+                            # 构建 Fluent 命令
+                            command = f"3ddp -g -t{core_num} -wait -i {file_name}"
+                        else:
+                            # 构建 Fluent 命令
+                            command = f"3ddp -g -t{core_num} -wait -i {file_name}"
+                        #执行 Fluent 命令
+                        if fluent_path:
+                            os.system(f'{fluent_path} {command}')
+                        else:
+                            subprocess.run(f'fluent {command}', shell=True)
                         print(f"case_{case},{flow['name']}={flow_para} solved")
 
             print("Fluent 命令执行完毕。")
