@@ -1,6 +1,9 @@
+def set_ini_case(inicase=None):
+    tui_pras = "/file/read-case/ini_case.cas\n"
+    return tui_pras
 
 def set_velocity(velocity=None):
-    tui_pras = f"/define/boundary-conditions/velocity-inlet inlet yes velocity yes {velocity}\n"
+    tui_pras = f"/define/boundary-conditions/set/velocity-inlet/inlet vmag () no {velocity} q\n"
     return tui_pras if velocity else None
 
 def set_iterate(iterate=None):
@@ -16,10 +19,7 @@ def set_convergence_criterion(convergence_criterion=None):
     return tui_pras if convergence_criterion else None
 
 def set_result_file_path(result_file_path = None):
-    tui_pras = f"""
-    file/write-case-data {result_file_path}.cas
-/file/write-data "{result_file_path}.dat"
-"""
+    tui_pras = f"/file/write-case-data {result_file_path}.cas\n"
     return tui_pras
 
 
@@ -30,7 +30,8 @@ def create_jou_line(dct_pram):
         'iterate':set_iterate,
         'time_step':set_time_step,
         'convergence_criterion':set_convergence_criterion,
-        'result_file_path' : set_result_file_path
+        'result_file_path' : set_result_file_path,
+        'ini_case' : set_ini_case
     }
     for key, value in dct_pram.items():
         if value:
