@@ -440,7 +440,7 @@ class AutoFluent:
                         print(f"journal文件已生成到 {file_path} 文件夹中。")
                         i+=1
             
-        def runSim_case(self, flow_variable, case_name, core_num, os_name):
+        def runSim_case(self, flow_variable, case_name, core_num, os_name, fluent_path = None):
             self.autofluent.runSimulation(flow_variable, case_name, core_num, os_name)
 
     class Server:
