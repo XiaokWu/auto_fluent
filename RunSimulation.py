@@ -1,7 +1,6 @@
 import liquids as liq
 from auto_fluent import AutoFluent
 import numpy as np
-import yaml
 import Parameters as pm
 
 fluid = liq.Extract_fluid(pm.fluid_name)
@@ -43,10 +42,11 @@ def RunSimulation():
     
     lst_flow_varibles, lst_heat_bc = Extract_BC()
      
-  
+    
+    dct_simu_para = pm.get_dct_simu_parameters()
     
     
-    fluent.joural_gen_case(pm.heatsink, lst_flow_varibles)
+    fluent.joural_gen_case(pm.heatsink, lst_flow_varibles, dct_simu_para)
     fluent.runSim_case(lst_flow_varibles, pm.heatsink, pm.core_number, pm.os_name, pm.fluent_path)
 
 

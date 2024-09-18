@@ -8,9 +8,10 @@ core_number : 5
 os_name : 'linux'
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 
+# relative path to auto_run
 folders:
   mesh_folder : 'mesh'
-  ini_case_folder : 'ini_case'
+  ini_case_folder : '../ini_case'
   jou_folder : "jurnal"
   result_folder : 'result'
   output_folder : 'outputs'
@@ -23,7 +24,7 @@ simluation_parameters:
   heatsink : ['1']
   heatflux : [100000]
   fluid : 'water'
-  iterate : 5
+  iterate : 10
 
 
 geometry:

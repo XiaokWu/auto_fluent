@@ -35,8 +35,8 @@ output_features = config['output_features']
 
 def get_dct_simu_parameters():
     dct_para = {
-        'Re' : Re,
-        'massflow' : massflow,
-        'heatsink' : heatsink,
-        'heatflux' : heatflux,
+        'fluid_name' : fluid_name,
+        'iterate' : iterate
     }
+    
+    return dct_para
