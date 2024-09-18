@@ -465,7 +465,7 @@ class AutoFluent:
                         dct_para = {
                             'ini_case': ini_case,
                             'velocity': velocity,
-                            'iteration': 5,
+                            'iterate': 5,
                             'result_file_path': result_file_path
                         }
                         jul = fluent_tui.creat_jou(dct_para)
@@ -477,6 +477,7 @@ class AutoFluent:
                         
                         
         def runSim_case(self, flow_variable, case_name, core_num, os_name, fluent_path = None):
+            os.chdir(self.autofluent.simulation_name)
             #运行Fluent
             for case in case_name:
                 print(f'####################### case_{case} #########################')
@@ -484,6 +485,7 @@ class AutoFluent:
                     print(f"############# 当前变量：{flow['name']} ################")
                     for flow_para in flow['val']:
                         file_name = f"case_{case},{flow['name']}={flow_para}.jou"
+                        file_name = os.path.join(self.autofluent.jou_folder,file_name)
                         if os_name == 'Windows':
                             # 构建 Fluent 命令
                             command = f"3ddp -g -t{core_num} -wait -i {file_name}"
@@ -498,5 +500,4 @@ class AutoFluent:
                         print(f"case_{case},{flow['name']}={flow_para} solved")
 
             print("Fluent 命令执行完毕。")
-            os.chdir(os.path.dirname(os.getcwd()))
             self.autofluent.clear_folder(self.autofluent.jou_folder)
