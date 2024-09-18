@@ -1,5 +1,5 @@
 def set_ini_case(inicase=None):
-    tui_pras = "/file/read-case/ini_case.cas\n"
+    tui_pras = f"/file/read-case/{inicase}\n"
     return tui_pras
 
 def set_velocity(velocity=None):

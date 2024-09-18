@@ -23,6 +23,7 @@ massflow = simulation_parameters['massflow']
 heatsink = simulation_parameters['heatsink']
 heatflux = simulation_parameters['heatflux']
 fluid_name = simulation_parameters['fluid']
+iterate = simulation_parameters['iterate']
 
 geometry = config['geometry']
 inlet_area = float(geometry['inlet_area'])
@@ -31,3 +32,11 @@ inlet_position = geometry['inlet_position']
 outlet_position = geometry['outlet_position']
 
 output_features = config['output_features']
+
+def get_dct_simu_parameters():
+    dct_para = {
+        'Re' : Re,
+        'massflow' : massflow,
+        'heatsink' : heatsink,
+        'heatflux' : heatflux,
+    }

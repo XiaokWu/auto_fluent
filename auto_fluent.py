@@ -450,7 +450,7 @@ class AutoFluent:
         
         def joural_gen_case(self, case_name, flow_variable):
             for case in case_name:
-                ini_case = os.path.join(self.autofluent.ini_case_folder,case)
+                ini_case = os.path.join(self.autofluent.ini_case_folder,f'{case}.cas.h5')
                 for flow in flow_variable:
                     velocitys = flow['velocity'] 
                     i=0
@@ -488,10 +488,10 @@ class AutoFluent:
                         file_name = os.path.join(self.autofluent.jou_folder,file_name)
                         if os_name == 'Windows':
                             # 构建 Fluent 命令
-                            command = f"3ddp -g -t{core_num} -wait -i {file_name}"
+                            command = f"3ddp -g -t{core_num} -i {file_name}"
                         else:
                             # 构建 Fluent 命令
-                            command = f"3ddp -g -t{core_num} -wait -i {file_name}"
+                            command = f"3ddp -g -t{core_num} -i {file_name}"
                         #执行 Fluent 命令
                         if fluent_path:
                             os.system(f'{fluent_path} {command}')

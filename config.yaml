@@ -23,6 +23,7 @@ simluation_parameters:
   heatsink : ['1']
   heatflux : [100000]
   fluid : 'water'
+  iterate : 5
 
 
 geometry:
