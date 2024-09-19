@@ -459,16 +459,19 @@ class AutoFluent:
                         # 构建jou文件
                         file_name = f"case_{case},{flow['name']}={flow_para}.jou"
                         case_name = f"case_{case},{flow['name']}={flow_para}"
-                        case_flie_path = os.path.join(self.autofluent.case_folder,case_name)
-                        result_file_case = f"case_{case},{flow['name']}={flow_para}"
-                        result_file_path = os.path.join(self.autofluent.result_folder, result_file_case)
+                        case_file_path = os.path.join(self.autofluent.simulation_name,self.autofluent.case_folder,case_name)
+                        result_file_case = f"case_{case},{flow['name']}={flow_para}.csv"
+                        result_file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.result_folder, result_file_case)
+                        lst_surface = ['inlet', 'outlet', 'heatface']
+                        lst_data = ['velocity', 'temperature', 'pressure']
+                        lst_result_args = [result_file_path, lst_surface, lst_data]
                         dct_para = {
                             'ini_case': ini_case,
                             'velocity': velocity,
                             'initialize': 'hyb',
                             'iterate': dct_sim_para['iterate'],
                             'write_case': case_file_path,
-                            'write_result': result_file_path
+                            'write_result': lst_result_args
                         }
                         jul = fluent_tui.creat_jou(dct_para)
                         file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.jou_folder, file_name)

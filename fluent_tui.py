@@ -30,7 +30,10 @@ def write_case(case_file_path = None):
     tui_pras = f"/file/write-case-data {case_file_path}.cas\n"
     return tui_pras
 
-def write_result(result_path=None, lst_surface, lst_data):
+def write_result(lst_result_args):
+    result_path = lst_result_args[0]
+    lst_surface = lst_result_args[1]
+    lst_data = lst_result_args[2]
     surfaces = ''
     for surface in lst_surface:
         surfaces = f"{surfaces} {surface}"
@@ -38,6 +41,7 @@ def write_result(result_path=None, lst_surface, lst_data):
     for data in lst_data:
         datas = f"{datas} {data}"
     tui_paras = f'/file/export/ascii {result_path} {surfaces} () y {datas} q y'
+    return tui_paras
 
 
 
