@@ -465,12 +465,8 @@ class AutoFluent:
                         dct_para = {
                             'ini_case': ini_case,
                             'velocity': velocity,
-<<<<<<< HEAD
                             'initialize': 'hyb',
-                            'iterate': 5,
-=======
                             'iterate': dct_sim_para['iterate'],
->>>>>>> 615bfa27aa8efca370c51e9a3884979021898ac7
                             'result_file_path': result_file_path
                         }
                         jul = fluent_tui.creat_jou(dct_para)
