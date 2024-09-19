@@ -25,6 +25,7 @@ class Mercury(Liquid):
 def Extract_fluid(name_fluid):
     dct_water = {
         'name': ['water', 'H2O', 'Water'],
+        'label_fluent' : 'water-liquid',
         'val' : Water()
     }
 

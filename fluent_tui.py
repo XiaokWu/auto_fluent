@@ -18,13 +18,26 @@ def set_convergence_criterion(convergence_criterion=None):
     tui_pras = f"/solve/set/convergence-criterion {convergence_criterion}\n"
     return tui_pras if convergence_criterion else None
 
-def set_result_file_path(result_file_path = None):
-    tui_pras = f"/file/write-case-data {result_file_path}.cas\n"
-    return tui_pras
-
 def set_initialize(initialization=None):
     tui_paras = f"/solve/initialize/hyb-initialization\n"
     return tui_paras
+
+def set_fluid(fluid=None):
+    tui_paras = f"/define/boundary-conditions/set/fluid fluid* () material yes {fluid} q"
+    return tui_paras
+
+def write_case(case_file_path = None):
+    tui_pras = f"/file/write-case-data {case_file_path}.cas\n"
+    return tui_pras
+
+def write_result(result_path=None, lst_surface, lst_data):
+    surfaces = ''
+    for surface in lst_surface:
+        surfaces = f"{surfaces} {surface}"
+    datas = ''
+    for data in lst_data:
+        datas = f"{datas} {data}"
+    tui_paras = f'/file/export/ascii {result_path} {surfaces} () y {datas} q y'
 
 
 
@@ -34,14 +47,15 @@ def create_jou_line(dct_pram):
         'iterate':set_iterate,
         'time_step':set_time_step,
         'convergence_criterion':set_convergence_criterion,
-        'result_file_path' : set_result_file_path,
+        'write_case' : write_case,
         'ini_case' : set_ini_case,
-        'initialize' : set_initialize
+        'initialize' : set_initialize,
+        'write_result' : write_result
     }
     for key, value in dct_pram.items():
         if value:
             yield dct_func[key](value)
-    yield "/exit OK"
+    # yield "/exit OK"
             
 def creat_jou(dct_pram):
     jou = "".join(create_jou_line(dct_pram))
