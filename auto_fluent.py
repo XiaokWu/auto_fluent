@@ -448,7 +448,7 @@ class AutoFluent:
         def __init__(self, autofluent) -> None:
             self.autofluent = autofluent
         
-        def joural_gen_case(self, case_name, flow_variable):
+        def joural_gen_case(self, case_name, flow_variable, dct_sim_para):
             for case in case_name:
                 ini_case = os.path.join(self.autofluent.ini_case_folder,f'{case}.cas.h5')
                 for flow in flow_variable:
@@ -465,8 +465,12 @@ class AutoFluent:
                         dct_para = {
                             'ini_case': ini_case,
                             'velocity': velocity,
+<<<<<<< HEAD
                             'initialize': 'hyb',
                             'iterate': 5,
+=======
+                            'iterate': dct_sim_para['iterate'],
+>>>>>>> 615bfa27aa8efca370c51e9a3884979021898ac7
                             'result_file_path': result_file_path
                         }
                         jul = fluent_tui.creat_jou(dct_para)
@@ -501,4 +505,4 @@ class AutoFluent:
                         print(f"case_{case},{flow['name']}={flow_para} solved")
 
             print("Fluent 命令执行完毕。")
-            self.autofluent.clear_folder(self.autofluent.jou_folder)
+            #self.autofluent.clear_folder(self.autofluent.jou_folder)
