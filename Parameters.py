@@ -31,6 +31,8 @@ characteristic_length = geometry['characteristic_length']
 inlet_position = geometry['inlet_position']
 outlet_position = geometry['outlet_position']
 
+output_result_facesname = config['output_result_facesname']
+output_result_dataname = config['output_result_dataname']
 output_features = config['output_features']
 
 def get_dct_simu_parameters():

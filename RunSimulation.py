@@ -44,9 +44,13 @@ def RunSimulation():
      
     
     dct_simu_para = pm.get_dct_simu_parameters()
+    dct_result_data = {
+        'lst_surface' : pm.output_result_facesname,
+        'lst_data' : pm.output_result_dataname
+    }
     
     
-    fluent.joural_gen_case(pm.heatsink, lst_flow_varibles, dct_simu_para)
+    fluent.joural_gen_case(pm.heatsink, lst_flow_varibles, dct_simu_para, dct_result_data)
     fluent.runSim_case(lst_flow_varibles, pm.heatsink, pm.core_number, pm.os_name, pm.fluent_path)
 
 
