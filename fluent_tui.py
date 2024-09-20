@@ -40,7 +40,7 @@ def write_result(lst_result_args):
     datas = ''
     for data in lst_data:
         datas = f"{datas} {data}"
-    tui_paras = f'/file/export/ascii {result_path} {surfaces} () y {datas} q y'
+    tui_paras = f'/file/export/ascii {result_path} {surfaces} () y {datas} q n \n'
     return tui_paras
 
 

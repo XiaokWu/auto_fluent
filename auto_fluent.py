@@ -463,7 +463,7 @@ class AutoFluent:
                         result_file_case = f"case_{case},{flow['name']}={flow_para}.csv"
                         result_file_path = os.path.join(self.autofluent.result_folder, result_file_case)
                         lst_surface = ['inlet', 'outlet', 'heatface']
-                        lst_data = ['velocity', 'temperature', 'pressure']
+                        lst_data = ['temperature', 'velocity', 'pressure']
                         lst_result_args = [result_file_path, lst_surface, lst_data]
                         dct_para = {
                             'ini_case': ini_case,
