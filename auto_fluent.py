@@ -448,7 +448,7 @@ class AutoFluent:
         def __init__(self, autofluent) -> None:
             self.autofluent = autofluent
         
-        def joural_gen_case(self, case_name, flow_variable, dct_sim_para):
+        def joural_gen_case(self, case_name, flow_variable, dct_sim_para, dct_result_data):
             for case in case_name:
                 ini_case = os.path.join(self.autofluent.ini_case_folder,f'{case}.cas.h5')
                 for flow in flow_variable:
@@ -462,8 +462,8 @@ class AutoFluent:
                         case_file_path = os.path.join(self.autofluent.case_folder,case_name)
                         result_file_case = f"case_{case},{flow['name']}={flow_para}.csv"
                         result_file_path = os.path.join(self.autofluent.result_folder, result_file_case)
-                        lst_surface = ['inlet', 'outlet', 'heatface']
-                        lst_data = ['temperature', 'velocity', 'pressure']
+                        lst_surface = dct_result_data['lst_surface']
+                        lst_data = dct_result_data['lst_data']
                         lst_result_args = [result_file_path, lst_surface, lst_data]
                         dct_para = {
                             'ini_case': ini_case,

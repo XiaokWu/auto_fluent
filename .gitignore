@@ -1,3 +1,4 @@
 ini_case/
 __pycache__/
 test/
+test.py
