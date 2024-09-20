@@ -34,13 +34,17 @@ def write_result(lst_result_args):
     result_path = lst_result_args[0]
     lst_surface = lst_result_args[1]
     lst_data = lst_result_args[2]
-    surfaces = ''
-    for surface in lst_surface:
-        surfaces = f"{surfaces} {surface}"
     datas = ''
+    tui_paras = ''
     for data in lst_data:
         datas = f"{datas} {data}"
-    tui_paras = f'/file/export/ascii {result_path} {surfaces} () y {datas} q n \n'
+    for surface in lst_surface:
+        result_path_surface = result_path.replace('.csv',f'_{surface}.csv')
+        tui_surface = f"/file/export/ascii {result_path_surface} {surface} () y {datas} q n"
+        if surface == lst_surface[0]:
+            tui_paras = tui_surface
+        else:
+            tui_paras = f"{tui_paras}\n{tui_surface}"
     return tui_paras
 
 
