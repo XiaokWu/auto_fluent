@@ -63,7 +63,7 @@ def create_jou_line(dct_pram):
     for key, value in dct_pram.items():
         if value:
             yield dct_func[key](value)
-    # yield "/exit OK"
+    yield "\n/exit OK"
             
 def creat_jou(dct_pram):
     jou = "".join(create_jou_line(dct_pram))
@@ -81,4 +81,4 @@ if __name__ == "__main__":
     jou = creat_jou(dct_para)
     print(jou)
     
-
+    
