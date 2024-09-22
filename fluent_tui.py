@@ -2,10 +2,28 @@ def set_ini_case(inicase=None):
     tui_pras = f"/file/read-case/{inicase}\n"
     return tui_pras
 
-def set_velocity(velocity=None):
-    tui_pras = f"/define/boundary-conditions/set/velocity-inlet/inlet () vmag no {velocity} q\n"
-    return tui_pras if velocity else None
+def set_velocity(lst_velocity_args=None):
+    velocity = lst_velocity_args[0]
+    lst_faces = lst_velocity_args[1]
+    faces = ''
+    if not velocity:    
+        return None
+    for face in lst_faces:
+        faces = f"{faces} {face}"
+    tui_pras = f"/define/boundary-conditions/set/velocity-inlet/{faces} () vmag no {velocity} q\n"
+    return tui_pras
 
+def set_heatflux(lst_heatflux_args = None):
+    heatfux = lst_heatflux_args[0]
+    lst_faces = lst_heatflux_args[1]
+    faces = ''
+    if not heatfux:
+        return None
+    for face in lst_faces:
+        faces = f"{faces} {face}"
+    tui_pras = f"/define/boundary-conditions/set/wall/{faces} () heat-flux () no {heatfux} q q q\n"
+    return tui_pras
+    
 def set_iterate(iterate=None):
     tui_pras = f"/solve/iterate {iterate}\n"
     return tui_pras if iterate else None
@@ -52,6 +70,7 @@ def write_result(lst_result_args):
 def create_jou_line(dct_pram):
     dct_func = {
         'velocity':set_velocity,
+        'heatflux':set_heatflux,
         'iterate':set_iterate,
         'time_step':set_time_step,
         'convergence_criterion':set_convergence_criterion,

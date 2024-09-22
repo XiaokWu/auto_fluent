@@ -24,6 +24,8 @@ heatsink = simulation_parameters['heatsink']
 heatflux = simulation_parameters['heatflux']
 fluid_name = simulation_parameters['fluid']
 iterate = simulation_parameters['iterate']
+velocity_bc_facesname = simulation_parameters['velocity_bc_facesname']
+heatflux_bc_facesname = simulation_parameters['heatflux_bc_facesname']
 
 geometry = config['geometry']
 inlet_area = float(geometry['inlet_area'])

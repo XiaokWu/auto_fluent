@@ -25,6 +25,8 @@ simluation_parameters:
   heatflux : [100000]
   fluid : 'water'
   iterate : 500
+  velocity_bc_facesname : ['inlet']
+  heatflux_bc_facesname : ['heatface'] 
 
 
 geometry:

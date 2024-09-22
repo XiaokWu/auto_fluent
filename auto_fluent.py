@@ -462,12 +462,15 @@ class AutoFluent:
                         case_file_path = os.path.join(self.autofluent.case_folder,case_name)
                         result_file_case = f"case_{case},{flow['name']}={flow_para}.csv"
                         result_file_path = os.path.join(self.autofluent.result_folder, result_file_case)
+                        lst_heatflux_args = [100000, ['heatface']]
+                        lst_velocity_args = [velocity, ['inlet']]
                         lst_surface = dct_result_data['lst_surface']
                         lst_data = dct_result_data['lst_data']
                         lst_result_args = [result_file_path, lst_surface, lst_data]
                         dct_para = {
                             'ini_case': ini_case,
-                            'velocity': velocity,
+                            'velocity': lst_velocity_args,
+                            'heatflux': lst_heatflux_args,
                             'initialize': 'hyb',
                             'iterate': dct_sim_para['iterate'],
                             'write_case': case_file_path,
