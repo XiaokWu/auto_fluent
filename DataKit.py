@@ -75,41 +75,101 @@ class DataLoader(Kit):
             max_temperature = result['temperature'].max()-273.15
             return avg_temperature if zone == 'out' else max_temperature
         
-        def datagather_and_process(self, base,variable):
-            print("################# DataProcess #################")
-            result_folder = os.path.join(self.result_folder, self.simulation_name)
-            result_list = os.listdir(result_folder)
-            feature_columns = self.output_features    
-            output_data = pd.DataFrame(columns=feature_columns)
-            for label in base:
-                for flow in variable:
-                    velocity = self.v[variable.index(flow)]
-                    addon = pd.DataFrame(columns=feature_columns)
-                    addon['heatsink'] = [label]
-                    addon['Re'] = [flow]
-                    addon['inlet_velocity'] = [velocity]
-                    for result_name in result_list:
-                        result_info = result_name.split(',')
-                        label_name = result_info[0]
-                        variable_number = result_info[1]
-                        if label_name == label and float(variable_number)== flow:
-                            zone = result_info[2]
-                            result_path = os.path.join(result_folder, result_name)
-                            result = self.resultLoder(result_path)
-                            if zone == 'solid':
-                                addon['heatsink_avg_temperature'] = result['temperature'].mean()-273.15
-                                addon['heatsink_max_temperature'] = result['temperature'].max()-273.15
-                            else:
-                                inlet_result, outlet_result = self.extract_surface_result(self.inlet_position, self.outlet_position, result)
-                                addon["outlet_avg_temperature"] = outlet_result['temperature'].mean()-273.15
-                                addon['inlet_avg_temperature'] = inlet_result['temperature'].mean()-273.15
-                                addon['outlet_avg_pressure'] = outlet_result['pressure'].mean()
-                                addon['inlet_avg_pressure'] = inlet_result['pressure'].mean()
+        @staticmethod
+        def get_heatsink_type(result_name):
+            return result_name.split(',')[0].split('_')[1]
 
-                    output_data=pd.concat([output_data,addon[feature_columns]], axis=0)
-                print(f'heatsink{label}done')
-            print("########### output ############")
-            print(output_data)
-            output_path = os.path.join(self.output_folder, f'output_{self.simulation_name}.csv')
-            output_data.to_csv(output_path, index=False)
-            
+        @staticmethod
+        def get_variable_info(variable):
+            variable_type = variable.split('=')[0]
+            variable_value = variable.split('=')[1] 
+            return variable_type, variable_value
+
+        @staticmethod
+        def get_max_value(df, column):
+            return df[column].max()
+
+        @staticmethod
+        def get_avg_value(df, column):
+            return df[column].mean()
+
+        @staticmethod
+        def get_min_value(df, column):
+            return df[column].min()
+
+
+        def get_dct_feature_info(lst_feature):
+            '''
+            Get the dictionary of feature information
+            '''
+            dct = {}
+            dct['variable'] = []
+            for feature in lst_feature:
+                feature_info = feature.split('_')
+                if len(feature_info) == 1:
+                    dct['variable'].append(feature)
+                else:
+                    face_name = feature_info[0]
+                    if face_name not in dct.keys():
+                        dct[face_name] = []
+                    dct[face_name].append({feature_info[2]:feature_info[1]})
+            return dct
+
+        def extract_data_from_file(df_result,result_file_name, dct_feature_info):
+            '''
+            Extract the data from the csv file
+            '''
+            dct_data_kit = {
+                'avg':DataLoader.get_avg_value,
+                'max':DataLoader.get_max_value,
+                'min':DataLoader.get_min_value
+            }
+            result = result_file_name
+            result_face = result.split('_')[2].split('.')[0]
+            variable = result.split('_')[1].split(',')[1]
+            df_result.rename(columns={
+                'velocity-magnitude':'velocity'
+            }, inplace=True)
+            df_result_addon = pd.DataFrame()
+            df_result_addon['heatsink'] = [DataLoader.get_heatsink_type(result)]
+            df_result_addon[DataLoader.get_variable_info(variable)[0]] = [DataLoader.get_variable_info(variable)[1]]
+            if result_face in dct_feature_info.keys():
+                for dct in dct_feature_info[result_face]:
+                    physical_value = list(dct.keys())[0]
+                    value_type = list(dct.values())[0]
+                    if value_type in dct_data_kit.keys():
+                        addon_value = dct_data_kit[value_type](df_result, physical_value)
+                        df_result_addon[f"{result_face}_{value_type}_{physical_value}"] = [addon_value]
+                    else:
+                        raise ValueError(f"Invalid value type {value_type}")
+                return df_result_addon
+            else:
+                pass
+
+
+
+        def output(result_folder, features):
+            output_data = pd.DataFrame(columns=features)
+            dct_feature_info = DataLoader.get_dct_feature_info(features)
+            lst_result = os.listdir(result_folder)
+            lst_result.sort()
+            output_data_line = pd.DataFrame()
+            for result in lst_result:
+                result_face = result.split('_')[2].split('.')[0]
+                if result_face in dct_feature_info.keys():
+                    df_result = pd.read_csv(os.path.join(result_folder, result))
+                    df_result.columns = df_result.columns.str.strip()
+                    addon = DataLoader.extract_data_from_file(df_result, result, dct_feature_info)
+                    if output_data_line.empty:
+                        output_data_line = addon
+                    else:
+                        output_data_line = pd.merge(output_data_line, addon, on = dct_feature_info['variable'])
+                    if len(output_data_line.columns)==len(features):
+                        # 排除空或全NA的条目
+                        output_data_line = output_data_line.dropna(how='all')
+                        if not output_data_line.empty:
+                            output_data = pd.concat([output_data, output_data_line[features]], axis=0)
+                        output_data_line = pd.DataFrame()
+                    print(f'Processing file : {result}')
+            return output_data
+                    

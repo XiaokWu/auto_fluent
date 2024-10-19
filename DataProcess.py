@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import liquids as liq
 from DataKit import Kit
+from DataKit import DataLoader
+import Parameters
 
 def resultLoder(path):
     data = pd.read_csv(path, delimiter=',')
@@ -80,26 +82,33 @@ def plot_data(heatsinks,feature_x,feature_y):
     plt.show()
 
 def DataProcess():
-    df = resultLoder('output.csv')
-    coolent = liq.Water()
-    inletSurface = 0.052**2
-    Re = df['Re']
-    lst_heatsink = [1,2]
-    dct_heatsink_df = {}
-    heatflux = 10000
-    for heatink_idx in lst_heatsink:
-        dct_heatsink_df[f'heatsink_{heatink_idx}'] = df[df['heatsink']==heatink_idx]
+    print('\n ###########################################DataProcess###########################################')
+    print('##################################Extracting data from the result file###############################')
+    output_data = DataLoader.output(Parameters.result_folder,Parameters.output_features)
+    print('\n \n ##################################Data extraction completed#######################################')
+    print(output_data)
+    pd.DataFrame.to_csv(output_data, 'output.csv',index=False)
     
-    for df in dct_heatsink_df.values():
-        Kit.fluid().get_massFlow(df,coolent)
-        Kit.heat().get_ThermalResistance_OFheatsink (df)
-        Kit.heat().get_nusseltNumber_OFheatsink(df)
-        Kit.fluid().get_Delta_P(df)
-        Kit.heat().get_heatCo(df)
+    # df = resultLoder('output.csv')
+    # coolent = liq.Water()
+    # inletSurface = 0.052**2
+    # Re = df['Re']
+    # lst_heatsink = [1,2]
+    # dct_heatsink_df = {}
+    # heatflux = 10000
+    # for heatink_idx in lst_heatsink:
+    #     dct_heatsink_df[f'heatsink_{heatink_idx}'] = df[df['heatsink']==heatink_idx]
     
-    heatsinks = dct_heatsink_df.values()
-    print(heatsinks)
-    plot_data(heatsinks,'Re','h/Delta_P')
+    # for df in dct_heatsink_df.values():
+    #     Kit.fluid().get_massFlow(df,coolent)
+    #     Kit.heat().get_ThermalResistance_OFheatsink (df)
+    #     Kit.heat().get_nusseltNumber_OFheatsink(df)
+    #     Kit.fluid().get_Delta_P(df)
+    #     Kit.heat().get_heatCo(df)
+    
+    # heatsinks = dct_heatsink_df.values()
+    # print(heatsinks)
+    # plot_data(heatsinks,'Re','h/Delta_P')
     
     
     
