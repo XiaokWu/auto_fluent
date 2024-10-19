@@ -7,6 +7,7 @@ import Parameters as pm
 import DataProcess 
 import RunSimulation
 
-# os.system('pip install -r requirements.txt')
+os.system('pip3 install -r requirements.txt')
+print('\n\n\n#######################################################  Simulation Start #######################################################')
 RunSimulation.RunSimulation()
 DataProcess.DataProcess()

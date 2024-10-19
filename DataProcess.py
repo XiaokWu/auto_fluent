@@ -61,11 +61,6 @@ def get_relativeData(Meshs, basefeatrue, baseScale, featrueColumn_y, plot):
     
     return outFrame
 
-
-    
-    
-    
-    
     
     
 def plot_data(heatsinks,feature_x,feature_y):
@@ -82,10 +77,10 @@ def plot_data(heatsinks,feature_x,feature_y):
     plt.show()
 
 def DataProcess():
-    print('\n ###########################################DataProcess###########################################')
-    print('##################################Extracting data from the result file###############################')
+    print('\n ###########################################  DataProcess  ###########################################')
+    print('##################################  Extracting data from the result file  ###############################')
     output_data = DataLoader.output(Parameters.result_folder,Parameters.output_features)
-    print('\n \n ##################################Data extraction completed#######################################')
+    print('\n \n ##################################  Data extraction completed  #######################################')
     print(output_data)
     pd.DataFrame.to_csv(output_data, 'output.csv',index=False)
     
