@@ -5,6 +5,7 @@ with open('config.yaml', 'r') as file:
 
 simulation_name = config['simulation_name']
 on_server = config['on_server']
+on_venv = config['on_venv']
 core_number = config['core_number']
 os_name = config['os_name']
 fluent_path = config['fluent_path']

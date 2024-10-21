@@ -3,7 +3,7 @@ import sys
 import subprocess
 import conf.Parameters as pm
 
-if pm.on_server:
+if pm.on_server and pm.on_venv:
     # 检查是否在虚拟环境中运行
     if 'VIRTUAL_ENV' not in os.environ:
         os.system('chmod +x conf/run_with_venv.sh')
