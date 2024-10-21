@@ -3,7 +3,7 @@ simulation_name : 'test'
 #The simualtion is on server or not
 on_server : True
 #Number of cores in use
-core_number : 40
+core_number : 90
 #system type
 os_name : 'linux'
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'

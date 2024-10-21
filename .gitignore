@@ -8,5 +8,7 @@
 !DataUtils/**
 !SimulationUtils/
 !SimulationUtils/**
+!ini_case/
+!ini_case/add_your_case_here.txt
 
 __pycache__/
