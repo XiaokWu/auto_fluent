@@ -3,19 +3,17 @@ from auto_fluent import AutoFluent
 import numpy as np
 import Parameters as pm
 
-fluid = liq.Extract_fluid(pm.fluid_name)
-
-def Extract_BC():
+def Extract_BC(fluid):
     dct_Re = {
         'name' : 'Re',
         'val' : pm.Re,
-        'velocity': np.array(pm.Re)*fluid.viscosity/(fluid.density*pm.characteristic_length)
+        'velocity': np.array(pm.Re)*fluid['viscosity']/(fluid['density']*pm.characteristic_length)
     }
     
     dct_massflow = {
         'name' : 'massflow',
         'val' : pm.massflow,
-        'velocity': np.array(pm.massflow)/(fluid.density*pm.inlet_area)
+        'velocity': np.array(pm.massflow)/(fluid['density']*pm.inlet_area)
     }
     
     dct_heatflux = {
@@ -48,8 +46,8 @@ def RunSimulation():
     else:
         fluent = AutoFluent.Local(Fluent)
         
-    
-    lst_flow_varibles, lst_heat_bc = Extract_BC()
+    _, fluid = liq.Extract_fluid(pm.fluid_name)
+    lst_flow_varibles, lst_heat_bc = Extract_BC(fluid)
      
     
     dct_simu_para = pm.get_dct_simu_parameters()

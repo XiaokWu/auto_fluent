@@ -1,0 +1,43 @@
+{
+"air": { 
+    "name": ["air", "Air"],
+    "density" : 997.0,
+    "viscosity": 0.000018,
+    "specific_heat": 1005.0,
+    "thermal_diffusivity": 0.0000019,
+    "thermal_conductivity": 0.025,
+    "thermal_expansion": 0.00343,
+    "prandtl": 0.7
+    },
+    "water": {
+    "name": ["water", "Water", "H2O"],
+    "density" : 997.0,
+    "viscosity": 0.00089,
+    "specific_heat": 4186.0,
+    "thermal_diffusivity": 0.0000014,
+    "thermal_conductivity": 0.6,
+    "thermal_expansion": 0.00021,
+    "prandtl": 7.0,
+    "label_fluent": "water-liquid"
+    },
+    "oil": {
+    "name": ["oil", "Oil"],
+    "density" : 900.0,
+    "viscosity": 0.0002,
+    "specific_heat": 2000.0,
+    "thermal_diffusivity": 0.000001,
+    "thermal_conductivity": 0.15,
+    "thermal_expansion": 0.0008,
+    "prandtl": 1000.0
+    },
+    "mercury": {
+    "name": ["mercury", "Mercury", "Hg"],
+    "density" : 13600.0,
+    "viscosity": 0.0015,
+    "specific_heat": 140.0,
+    "thermal_diffusivity": 0.0000001,
+    "thermal_conductivity": 8.3,
+    "thermal_expansion": 0.000181,
+    "prandtl": 0.015
+    }
+}
