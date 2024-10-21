@@ -1,3 +1,4 @@
 PyYaml
 Numpy
 Pandas
+matplotlib
