@@ -6,8 +6,6 @@ import numpy as np
 class Kit:
     """_summary_
     """
-    pass
-
     class fluid:
         
         @staticmethod    
@@ -87,15 +85,24 @@ class DataLoader(Kit):
 
         @staticmethod
         def get_max_value(df, column):
-            return df[column].max()
+            try:
+                return df[column].max()
+            except(KeyError):
+                print(f"Invalid column name {column}")
 
         @staticmethod
         def get_avg_value(df, column):
-            return df[column].mean()
+            try:
+                return df[column].mean()
+            except(KeyError):
+                print(f"Invalid column name {column}")
 
         @staticmethod
         def get_min_value(df, column):
-            return df[column].min()
+            try:
+                return df[column].min()
+            except(KeyError):
+                print(f"Invalid column name {column}")
 
 
         def get_dct_feature_info(lst_feature):
