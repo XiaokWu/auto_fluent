@@ -1,13 +1,21 @@
 import os
+import sys
+import subprocess
 import conf.Parameters as pm
 
+if pm.on_server:
+    # 检查是否在虚拟环境中运行
+    if 'VIRTUAL_ENV' not in os.environ:
+        os.system('chmod +x conf/run_with_venv.sh')
+        subprocess.run(['./conf/run_with_venv.sh'])
+        sys.exit()  # 退出当前脚本，避免递归调用
+    
 
-if pm.on_server: 
-    os.system('source ../myvenv/bin/activate')
-os.system('pip3 install -r requirements.txt')
-
+# 主要逻辑
 import DataUtils.DataProcess as DataProcess
 import SimulationUtils.RunSimulation as RunSimulation
+subprocess.run(['pip3', 'install', '-r', 'requirements.txt'])
+
 print('\n\n\n#######################################################  Simulation Start #######################################################')
 RunSimulation.RunSimulation()
 DataProcess.DataProcess()

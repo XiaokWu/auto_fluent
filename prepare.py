@@ -1,6 +1,4 @@
+import subprocess
 import os
-os.system('cd ..')
-os.system('python3.6 -m venv myvenv')
-os.system('source ../myvenv/bin/activate')
-os.system('cd auto_run')
-os.system('pip3 install -r requirements.txt')
+os.system('chmod +x conf/prepare.sh')
+subprocess.run(['./conf/prepare.sh'])
