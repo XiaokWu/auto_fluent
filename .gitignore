@@ -9,3 +9,8 @@
 !RunSimulation.py
 !fluid.json
 !Run.py
+!auto_fluent.py
+!DataProcess.py
+!conf/
+!DataUtils/
+!SimulationUtils/

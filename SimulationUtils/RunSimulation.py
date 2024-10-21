@@ -1,7 +1,7 @@
-import liquids as liq
-from auto_fluent import AutoFluent
+import conf.liquids as liq
+from SimulationUtils.auto_fluent import AutoFluent
 import numpy as np
-import Parameters as pm
+import conf.Parameters as pm
 
 def Extract_BC(fluid):
     dct_Re = {

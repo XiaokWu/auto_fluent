@@ -2,10 +2,10 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import liquids as liq
-from DataKit import Kit
-from DataKit import DataLoader
-import Parameters
+import conf.liquids as liq
+from DataUtils.DataKit import Kit
+from DataUtils.DataKit import DataLoader
+import conf.Parameters as Parameters
 
 def resultLoder(path):
     data = pd.read_csv(path, delimiter=',')
