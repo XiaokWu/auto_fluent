@@ -11,6 +11,7 @@
 !SimulationUtils/**
 !ini_case/
 !ini_case/add_your_case_here.txt
+!readme.md
 
 __pycache__/
 config.yaml
