@@ -2,6 +2,7 @@
 !.gitignore
 !main.py
 !requirements.txt
+!prepare.py
 !conf/
 !conf/**
 !DataUtils/
