@@ -7,9 +7,13 @@ source myenv/bin/activate
 pip3 install -r requirements.txt
 git update-index --assume-unchanged config.yaml
 ```
-如果不需要创建虚拟环境：
+如不需要创建虚拟环境：
 ```
 git clone https://github.com/XiaokWu/auto_run.git
 cd auto_run
 git update-index --assume-unchanged config.yaml
+```
+在`config.yaml` 文件中修改仿真参数后运行`main.py`
+```
+python3 main.py
 ```

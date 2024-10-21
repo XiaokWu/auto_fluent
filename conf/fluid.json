@@ -1,12 +1,12 @@
 {
-"air": { 
+    "air": {
     "name": ["air", "Air"],
-    "density" : 997.0,
-    "viscosity": 0.000018,
+    "density" : 1.17,
+    "viscosity": 0.000015,
     "specific_heat": 1005.0,
     "thermal_diffusivity": 0.0000019,
     "thermal_conductivity": 0.025,
-    "thermal_expansion": 0.00343,
+    "thermal_expansion": 0.0035,
     "prandtl": 0.7
     },
     "water": {
