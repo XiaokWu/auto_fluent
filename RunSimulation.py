@@ -31,6 +31,15 @@ def Extract_BC():
 
 
 def RunSimulation():
+    # dct_Simulation = {
+    #     'ini_case': ini_case,
+    #     'velocity': lst_velocity_args,
+    #     'heatflux': lst_heatflux_args,
+    #     'initialize': 'hyb',
+    #     'iterate': dct_sim_para['iterate'],
+    #     'write_case': case_file_path,
+    #     'write_result': lst_result_args
+    # }
     Fluent = AutoFluent(pm.simulation_name, pm.mesh_folder, pm.case_folder, pm.result_folder, pm.jou_folder, pm.ini_case_folder)
     Fluent.initial()
     

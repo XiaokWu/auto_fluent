@@ -4,10 +4,10 @@ import Parameters as pm
 # if pm.on_server:
 #     os.system('source ./myenv/bin/activate')
 
-# import DataProcess 
+import DataProcess 
 import RunSimulation
 
-# os.system('pip install -r requirements.txt')
+os.system('pip3 install -r requirements.txt')
+print('\n\n\n#######################################################  Simulation Start #######################################################')
 RunSimulation.RunSimulation()
-# DataProcess.DataProcess()
-    
+DataProcess.DataProcess()

@@ -23,6 +23,10 @@ def set_heatflux(lst_heatflux_args = None):
         faces = f"{faces} {face}"
     tui_pras = f"/define/boundary-conditions/set/wall/{faces} () heat-flux () no {heatfux} q q q\n"
     return tui_pras
+
+def set_fluid(fluid=None):
+    tui_paras = f"/define/boundary-conditions/set/fluid fluid* () material yes {fluid} q"
+    return tui_paras
     
 def set_iterate(iterate=None):
     tui_pras = f"/solve/iterate {iterate}\n"
