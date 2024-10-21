@@ -8,7 +8,7 @@ core_number : 40
 os_name : 'linux'
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 
-# relative path to auto_run
+# relative path to case folder
 folders:
   mesh_folder : 'mesh'
   ini_case_folder : '../ini_case'
@@ -38,4 +38,4 @@ geometry:
 
 output_result_facesname : ['inlet', 'outlet', 'heatface']
 output_result_dataname : ['temperature', 'pressure', 'velocity']
-output_features : ['heatsink', 'Re', "inlet_velocity", "outlet_avg_temperature", "heatsink_avg_temperature", 'heatsink_max_temperature','inlet_avg_temperature','outlet_avg_pressure','inlet_avg_pressure']
+output_features : ['heatsink', 'Re', "inlet_avg_velocity", "outlet_avg_temperature", "heatface_avg_temperature", 'heatface_max_temperature','inlet_avg_temperature','outlet_avg_pressure','inlet_avg_pressure']

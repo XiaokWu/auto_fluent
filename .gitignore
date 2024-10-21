@@ -1,6 +1,9 @@
-ini_case/
-__pycache__/
-test/
-test.py
-config.yaml
-myenv/
+*
+!.gitignore
+!main.py
+!DataKit.py
+!DataProcessor.py
+!fluent_tui.py
+!liquids.py
+!Parameters.py
+!RunSimulation.py
