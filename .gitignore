@@ -13,3 +13,4 @@
 !ini_case/add_your_case_here.txt
 
 __pycache__/
+config.yaml
