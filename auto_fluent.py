@@ -506,10 +506,10 @@ class AutoFluent:
                         else:
                             subprocess.run(f'fluent {command}', shell=True)
                         print(f"case_{case},{flow['name']}={flow_para} solved")
-                lst_non_directory_files = [item for item in os.listdir() if os.path.isfile(item)]
-                for item in lst_non_directory_files:
-                    if 'MPT_Monitor' in item:
-                        os.remove(item)
+                        lst_non_directory_files = [item for item in os.listdir() if os.path.isfile(item)]
+                        for item in lst_non_directory_files:
+                            if 'MPT_Monitor' in item:
+                                os.remove(item)
 
             print("Fluent 命令执行完毕。")
             #self.autofluent.clear_folder(self.autofluent.jou_folder)
