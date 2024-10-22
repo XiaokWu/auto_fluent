@@ -18,12 +18,14 @@ result_folder = folders['result_folder']
 output_folder = folders['output_folder']
 case_folder = folders['case_folder']
 
+simulation_variables = config['simulation_variables']
+Re = simulation_variables['Re']
+massflow = simulation_variables['massflow']
+case = simulation_variables['case']
+heatflux = simulation_variables['heatflux']
+fluids = simulation_variables['fluid']
+
 simulation_parameters = config['simluation_parameters']
-Re = simulation_parameters['Re']
-massflow = simulation_parameters['massflow']
-heatsink = simulation_parameters['heatsink']
-heatflux = simulation_parameters['heatflux']
-fluid_name = simulation_parameters['fluid']
 iterate = simulation_parameters['iterate']
 velocity_bc_facesname = simulation_parameters['velocity_bc_facesname']
 heatflux_bc_facesname = simulation_parameters['heatflux_bc_facesname']
@@ -40,7 +42,7 @@ output_features = config['output_features']
 
 def get_dct_simu_parameters():
     dct_para = {
-        'fluid_name' : fluid_name,
+        'fluid_name' : fluids,
         'iterate' : iterate
     }
     

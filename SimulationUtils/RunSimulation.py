@@ -4,6 +4,7 @@ import numpy as np
 import conf.Parameters as pm
 
 def Extract_BC(fluid):
+    # 将边界条件转化为速度以及热量输入
     dct_Re = {
         'name' : 'Re',
         'val' : pm.Re,
@@ -29,15 +30,7 @@ def Extract_BC(fluid):
 
 
 def RunSimulation():
-    # dct_Simulation = {
-    #     'ini_case': ini_case,
-    #     'velocity': lst_velocity_args,
-    #     'heatflux': lst_heatflux_args,
-    #     'initialize': 'hyb',
-    #     'iterate': dct_sim_para['iterate'],
-    #     'write_case': case_file_path,
-    #     'write_result': lst_result_args
-    # }
+    
     Fluent = AutoFluent(pm.simulation_name, pm.mesh_folder, pm.case_folder, pm.result_folder, pm.jou_folder, pm.ini_case_folder)
     Fluent.initial()
     
@@ -45,19 +38,42 @@ def RunSimulation():
         fluent = AutoFluent.Server(Fluent)
     else:
         fluent = AutoFluent.Local(Fluent)
-        
-    _, fluid = liq.Extract_fluid(pm.fluid_name)
-    lst_flow_varibles, lst_heat_bc = Extract_BC(fluid)
      
+    lst_dct_fluids = []   
+    for fluid_name in pm.fluids:
+        _, fluid = liq.Extract_fluid(fluid_name)
+        lst_dct_fluids.append(fluid)
+    lst_dct_fluids = [liq.Extract_fluid(fluid_name) for fluid_name in pm.fluids]
     
-    dct_simu_para = pm.get_dct_simu_parameters()
-    dct_result_data = {
-        'lst_surface' : pm.output_result_facesname,
-        'lst_data' : pm.output_result_dataname
+    print(lst_dct_fluids)
+    lst_flow_varibles, lst_heat_varibles = Extract_BC(fluid)
+    lst_velocity_args = [lst_flow_varibles,pm.velocity_bc_facesname]
+    lst_heatflux_args = [lst_heat_varibles, pm.heatflux_bc_facesname]
+    print(lst_velocity_args)
+    
+    dct_simularion_variables = {
+        'case': pm.case,
+        'velocity': lst_velocity_args,
+        'heatflux': lst_heatflux_args,
+        'fluid': lst_dct_fluids
     }
     
+    for key, val in dct_simularion_variables:
+        print()
     
-    fluent.joural_gen_case(pm.heatsink, lst_flow_varibles, dct_simu_para, dct_result_data)
-    fluent.runSim_case(lst_flow_varibles, pm.heatsink, pm.core_number, pm.os_name, pm.fluent_path)
+    # dct_Simulation = {
+    #     'initialize': 'hyb',
+    #     'iterate': pm.iterate,
+    # }
+    
+    # dct_simu_para = pm.get_dct_simu_parameters()
+    # dct_result_data = {
+    #     'lst_surface' : pm.output_result_facesname,
+    #     'lst_data' : pm.output_result_dataname
+    # }
+    
+    
+    # fluent.joural_gen_case(pm.case, lst_flow_varibles, dct_simu_para, dct_result_data)
+    # fluent.runSim_case(lst_flow_varibles, pm.case, pm.core_number, pm.os_name, pm.fluent_path)
 
 
