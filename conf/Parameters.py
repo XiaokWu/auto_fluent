@@ -23,6 +23,7 @@ Re = simulation_variables['Re']
 massflow = simulation_variables['massflow']
 case = simulation_variables['case']
 heatflux = simulation_variables['heatflux']
+tem = simulation_variables['tem']
 fluids = simulation_variables['fluid']
 
 simulation_parameters = config['simluation_parameters']
@@ -47,3 +48,36 @@ def get_dct_simu_parameters():
     }
     
     return dct_para
+
+def get_inputs_info():
+    dct_inputs = {
+        'velocity':['Re', 'massflow'],
+        'heat':['heatflux','tem'],
+        'fluid':['fluid'],
+        'case':['case']
+    }
+    return dct_inputs
+
+def get_non_null_input_info(simulation_variables):
+    dct_inputs = get_inputs_info()
+    for key, value in simulation_variables.items():
+        if len(value) == 0:
+            print(f'value of {key} is null')
+            for key_input, value_input in dct_inputs.items():
+                if key in value_input:
+                    value_input.remove(key)
+    return dct_inputs
+            
+
+def parameters_check():
+    input_info = get_inputs_info()
+    for key, value in input_info.items():
+        non_null_num = 0
+        for variable in value:
+            if len(simulation_variables[variable]) != 0:
+                non_null_num +=1
+                break
+        if non_null_num == 0:
+            raise ValueError(f"No input in {key}")
+
+parameters_check()
