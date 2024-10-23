@@ -2,6 +2,12 @@ def set_ini_case(inicase=None):
     tui_pras = f"/file/read-case/{inicase}\n"
     return tui_pras
 
+def set_fluid(fluid):
+    pass
+
+def set_pressure(lst_press_args):
+    pass
+
 def set_velocity(lst_velocity_args=None):
     velocity = lst_velocity_args[0]
     lst_faces = lst_velocity_args[1]
@@ -75,6 +81,8 @@ def create_jou_line(dct_pram):
     dct_func = {
         'velocity':set_velocity,
         'heatflux':set_heatflux,
+        'pressure':set_pressure,
+        'fluid': set_fluid,
         'iterate':set_iterate,
         'time_step':set_time_step,
         'convergence_criterion':set_convergence_criterion,

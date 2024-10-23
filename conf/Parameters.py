@@ -1,4 +1,5 @@
 import yaml
+from collections import OrderedDict
 
 with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
@@ -27,9 +28,11 @@ tem = simulation_variables['tem']
 fluids = simulation_variables['fluid']
 
 simulation_parameters = config['simluation_parameters']
+energy_on = simulation_parameters['energy_on']
 iterate = simulation_parameters['iterate']
 velocity_bc_facesname = simulation_parameters['velocity_bc_facesname']
-heatflux_bc_facesname = simulation_parameters['heatflux_bc_facesname']
+heat_bc_facesname = simulation_parameters['heat_bc_facesname']
+pressure_bc_name = simulation_parameters['pressure_bc_facename']
 
 geometry = config['geometry']
 inlet_area = float(geometry['inlet_area'])
@@ -41,6 +44,21 @@ output_result_facesname = config['output_result_facesname']
 output_result_dataname = config['output_result_dataname']
 output_features = config['output_features']
 
+def ReToVelocity(Re, fluid):
+    return Re*fluid['viscosity']/(fluid['density']*characteristic_length)
+
+def MassflowToVelocity(massflow, fluid):
+    return massflow/(fluid['density']*inlet_area)
+
+def variablesToVelocity(dct_variables, fluid):
+    dct_trans_method = {
+        'Re': ReToVelocity,
+        'massflow': MassflowToVelocity
+    }
+    for key, value in dct_variables.items():
+        if key in dct_trans_method.keys():
+            return dct_trans_method[key](value, fluid)
+
 def get_dct_simu_parameters():
     dct_para = {
         'fluid_name' : fluids,
@@ -50,12 +68,13 @@ def get_dct_simu_parameters():
     return dct_para
 
 def get_inputs_info():
-    dct_inputs = {
-        'velocity':['Re', 'massflow'],
-        'heat':['heatflux','tem'],
-        'fluid':['fluid'],
-        'case':['case']
-    }
+    dct_inputs = OrderedDict([
+        ('case', ['case']),
+        ('velocity', ['Re', 'massflow']),
+        ('heat', ['heatflux', 'tem']),
+        ('fluid', ['fluid']),
+        ('pressure',['pressure'])
+    ])
     return dct_inputs
 
 def get_non_null_input_info(simulation_variables):
@@ -78,6 +97,9 @@ def parameters_check():
                 non_null_num +=1
                 break
         if non_null_num == 0:
-            raise ValueError(f"No input in {key}")
+            if (energy_on and key == 'heat') or key == 'pressure':
+                pass
+            else:
+                raise ValueError(f"No input in {key}")
 
 parameters_check()

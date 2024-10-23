@@ -3,42 +3,6 @@ from SimulationUtils.auto_fluent import AutoFluent
 import numpy as np
 import conf.Parameters as pm
 
-def Extract_BC(fluid):
-    # 将边界条件转化为速度以及热量输入
-    dct_Re = {
-        'name' : 'Re',
-        'val' : pm.Re,
-        'velocity': np.array(pm.Re)*fluid['viscosity']/(fluid['density']*pm.characteristic_length)
-    }
-    
-    dct_massflow = {
-        'name' : 'massflow',
-        'val' : pm.massflow,
-        'velocity': np.array(pm.massflow)/(fluid['density']*pm.inlet_area)
-    }
-    
-    dct_heatflux = {
-        'name' : 'heatflux',
-        'val' : pm.heatflux
-    }
-    
-    lst_flow_varibles = [dct_Re, dct_massflow]
-    lst_heat_bc = [dct_heatflux]
-    
-    return lst_flow_varibles, lst_heat_bc
-
-def  extract_velocitys(lst_velocity_args):
-    pass
-
-def extract_case(lst_case):
-    return lst_case
-
-def extract_heatflux(lst_heatflux_args):
-    return lst_heatflux_args['val']
-
-def extract_fluids(lst_dct_fluids):
-    pass 
-
 def traverse_simulation_varibles(dct_simulation_varibles, dct_run=None, lst_run_varibles=None):
     dct_simulation_varibles_copy = dct_simulation_varibles.copy()
     #递归调用每一级的变量
@@ -79,14 +43,10 @@ def get_lst_dct_simulation_variables(dct_simulation_variables, dct_input_info):
     lst_dct = lst_dct_simulation_variables.copy()
     for input_class , input in dct_input_info.items():
         if len(input) >1:  
-            # print('lst_dct:',lst_dct)
-            # print('dc:',dct_simulation_variables)
             lst_dct = []
             for item in lst_dct_simulation_variables:
-                # print(f'item: {item}\n')
                 for dct in seperate_input(item,input):  
                     lst_dct.append(dct)
-                # print('lst_dct',lst_dct)
             lst_dct_simulation_variables = lst_dct.copy()
                 
     return lst_dct_simulation_variables
@@ -96,7 +56,77 @@ def get_lst_dct_simulation_variables_of_single_case(lst_dct_simulation_variables
     for dct_simulation_variables in lst_dct_simulation_variables:
         lst_dct_simulation_variables_of_single_case += traverse_simulation_varibles(dct_simulation_variables)
     return lst_dct_simulation_variables_of_single_case
+
+def distingush_sim_variable (dct_sim_variable):
+    # 对传入的变量进行分类以及排序
+    for dct in dct_sim_variable:
+        dct_new = {}
+        for key_input, value_input in pm.get_inputs_info().items():
+            for key, value in dct.items():
+                if key in value_input:
+                    dct_new[key] = value
+                    break
+        dct.clear()
+        dct.update(dct_new)
+    return dct_sim_variable
+
+def getSimFileName (dct_simulation_variable_single_case):
+    #根据输入的变量生成相关文件的名称
+    file_name = ""
+    for key, value in dct_simulation_variable_single_case.items():
+        file_name += f"{key}={value},"
+    file_name = file_name[:-1]
+    return file_name
+
+def analysis_dct_sim_to_jou_args(dct_simulation_variable_single_case):
+    dct_simulation_variable_args =  {}
+    fluid = liq.Extract_fluid(dct_simulation_variable_single_case['fluid'])[1]
+    lst_fluid_args = []
+    dct_simulation_variable_args.update({'case' : dct_simulation_variable_single_case['case']})
+    if "pressure "in dct_simulation_variable_single_case.keys():
+        pressure = dct_simulation_variable_single_case['pressure']
+        lst_pressure_args = [pressure, pm.pressure_bc_name]
+    else:
+        lst_pressure_args = []
+    dct_simulation_variable_args.update({'pressure' : lst_pressure_args})
+    
+    velocity = pm.variablesToVelocity(dct_simulation_variable_single_case, fluid)
+    lst_velocity_args = [velocity, pm.velocity_bc_facesname]
+    dct_simulation_variable_args.update({'velocity' : lst_velocity_args})
+    
+    if pm.energy_on:
+        energy_type, energy_value = list(dct_simulation_variable_single_case.items())[2]
+        lst_energy_args = [energy_value, pm.heat_bc_facesname]
+        key_energy_args = energy_type
+        dct_simulation_variable_args.update({key_energy_args : lst_energy_args})
         
+
+    dct_simulation_variable_args.update({'fluid' : lst_fluid_args})
+    return dct_simulation_variable_args
+
+def ConcateJOUargs(dct_variable_args):
+    lst_key = list(dct_variable_args.keys())
+    for key in lst_key:
+        if len(dct_variable_args[key]) == 0:
+            del dct_variable_args[key]
+    dct_simularion_variables = {
+    'initialize': 'hyb',
+    'iterate': pm.iterate
+    }
+    dct_sim_args = {**dct_variable_args, **dct_simularion_variables}
+    return dct_sim_args
+    
+    
+def GenJou(fluent, lst_dct_simulation_variables_of_single_case):
+    for dct in lst_dct_simulation_variables_of_single_case:
+        case_name = getSimFileName(dct)
+        dct_sim_args = ConcateJOUargs(analysis_dct_sim_to_jou_args(dct))
+        dct_result_data = {
+        'lst_surface' : pm.output_result_facesname,
+        'lst_data' : pm.output_result_dataname
+            }
+        fluent.joural_gen_beta(case_name, dct_sim_args, dct_result_data)
+    
 
 def RunSimulation():
     
@@ -107,12 +137,7 @@ def RunSimulation():
         fluent = AutoFluent.Server(Fluent)
     else:
         fluent = AutoFluent.Local(Fluent)
-     
-    lst_dct_fluids = []   
-    for fluid_name in pm.fluids:
-        _, fluid = liq.Extract_fluid(fluid_name)
-        lst_dct_fluids.append(fluid)
-    lst_dct_fluids = [liq.Extract_fluid(fluid_name) for fluid_name in pm.fluids]
+    
     
     
     dct_simulation_variables= pm.simulation_variables.copy()  
@@ -124,31 +149,12 @@ def RunSimulation():
             del dct_simulation_variables[key]
     
     lst_dct_simulation_variables = get_lst_dct_simulation_variables(dct_simulation_variables, non_null_input_info)
+    lst_dct_simulation_variables_of_single_case = get_lst_dct_simulation_variables_of_single_case(lst_dct_simulation_variables)
+    lst_dct_simulation_variables_of_single_case = distingush_sim_variable(lst_dct_simulation_variables_of_single_case)
+    GenJou(fluent, lst_dct_simulation_variables_of_single_case)
     
-    # print(lst_dct_fluids)
-    lst_flow_varibles, lst_heat_varibles = Extract_BC(fluid)
-    lst_velocity_args = [lst_flow_varibles,pm.velocity_bc_facesname]
-    lst_heatflux_args = [lst_heat_varibles, pm.heatflux_bc_facesname]
-    # print(lst_velocity_args)
-    # print(lst_heatflux_args)
-    
-    # print(pm.simulation_variables)
-    for dct in get_lst_dct_simulation_variables_of_single_case(lst_dct_simulation_variables):
-        print(dct)
-    
-    dct_simularion_variables = {
-        'case': pm.case,
-        'heatflux': lst_heatflux_args,
-        'fluid': lst_dct_fluids,
-        'velocity': lst_velocity_args
-    }
 
-    
-    
-    # dct_Simulation = {
-    #     'initialize': 'hyb',
-    #     'iterate': pm.iterate,
-    # }
+        
     
     # dct_simu_para = pm.get_dct_simu_parameters()
     # dct_result_data = {
@@ -158,4 +164,4 @@ def RunSimulation():
     
     
     # fluent.joural_gen_case(pm.case, lst_flow_varibles, dct_simu_para, dct_result_data)
-    # fluent.runSim_case(lst_flow_varibles, pm.case, pm.core_number, pm.os_name, pm.fluent_path)
+    fluent.runSim_beta(pm.core_number, pm.os_name, pm.fluent_path)
