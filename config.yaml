@@ -1,12 +1,13 @@
-simulation_name : 'test'
+simulation_name : 'test_beta'
 
 #The simualtion is on server or not
 on_server : True
 on_venv : True
 #Number of cores in use
-core_number : 2
+core_number : 1
 #system type
 os_name : 'linux'
+#path to fluent
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 
 # relative path to case folder
@@ -18,16 +19,22 @@ folders:
   output_folder : 'outputs'
   case_folder : 'case'
 
+simulation_variables:
+  case : ['1']
+  heatflux : [10000,10]
+  fluid : ['air','water']
+  Re : [100,200,300,400]
+  massflow : [1]
+  tem : []
+  pressure : []
+ 
 
 simluation_parameters:
-  Re : [100]
-  massflow : [1]
-  heatsink : ['1']
-  heatflux : [100000]
-  fluid : 'water'
+  energy_on : True
   iterate : 500
   velocity_bc_facesname : ['inlet']
-  heatflux_bc_facesname : ['heatface'] 
+  heat_bc_facesname : ['heatface'] 
+  pressure_bc_facename : []
 
 
 geometry:
@@ -37,6 +44,8 @@ geometry:
   inlet_position : -3.900000080e-02
   outlet_position : 6.100000000e-02
 
-output_result_facesname : ['inlet', 'outlet', 'heatface']
-output_result_dataname : ['temperature', 'pressure', 'velocity']
-output_features : ['heatsink', 'Re', "inlet_avg_velocity", "outlet_avg_temperature", "heatface_avg_temperature", 'heatface_max_temperature','inlet_avg_temperature','outlet_avg_pressure','inlet_avg_pressure']
+outputs_infos:
+  case_label : 'heatsink'
+  output_result_facesname : ['inlet', 'outlet', 'heatface']
+  output_result_dataname : ['temperature', 'pressure', 'velocity']
+  output_features : ["inlet_avg_velocity", "outlet_avg_temperature", "heatface_avg_temperature", 'heatface_max_temperature','inlet_avg_temperature','outlet_avg_pressure','inlet_avg_pressure']
