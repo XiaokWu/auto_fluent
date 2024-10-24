@@ -40,9 +40,11 @@ characteristic_length = geometry['characteristic_length']
 inlet_position = geometry['inlet_position']
 outlet_position = geometry['outlet_position']
 
-output_result_facesname = config['output_result_facesname']
-output_result_dataname = config['output_result_dataname']
-output_features = config['output_features']
+outputs_infos = config['outputs_infos']
+case_label = outputs_infos['case_label']
+output_result_facesname = outputs_infos['output_result_facesname']
+output_result_dataname = outputs_infos['output_result_dataname']
+output_features = outputs_infos['output_features']
 
 def ReToVelocity(Re, fluid):
     return Re*fluid['viscosity']/(fluid['density']*characteristic_length)

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import conf.liquids as liq
 from DataUtils.DataKit import Kit
-from DataUtils.DataKit import DataLoader
+from DataUtils.DataKit import DataLoader_beta as DataLoader
 import conf.Parameters as Parameters
 
 def resultLoder(path):
@@ -79,10 +79,12 @@ def plot_data(heatsinks,feature_x,feature_y):
 def DataProcess():
     print('\n ###########################################  DataProcess  ###########################################')
     print('##################################  Extracting data from the result file  ###############################')
-    output_data = DataLoader.output(Parameters.result_folder,Parameters.output_features)
-    print('\n \n ##################################  Data extraction completed  #######################################')
-    print(output_data)
-    pd.DataFrame.to_csv(output_data, 'output.csv',index=False)
+    dct_output_data = DataLoader.output(Parameters.result_folder,Parameters.outputs_infos)
+    print('\n \n ##################################  Data extraction completed  #######################################\n\n')
+    for key, value in dct_output_data.items():
+        print(f'\n\n#######################{key} : {value.shape}#######################')
+        print(value)
+        pd.DataFrame.to_csv(value, f'out_{key}.csv',index=False)
     
     # df = resultLoder('output.csv')
     # coolent = liq.Water()

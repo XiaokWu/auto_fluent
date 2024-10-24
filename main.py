@@ -18,4 +18,4 @@ subprocess.run(['pip3', 'install', '-r', 'requirements.txt'])
 
 print('\n\n\n#######################################################  Simulation Start #######################################################')
 RunSimulation.RunSimulation()
-# DataProcess.DataProcess()
+DataProcess.DataProcess()

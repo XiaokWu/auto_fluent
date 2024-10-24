@@ -151,17 +151,8 @@ def RunSimulation():
     lst_dct_simulation_variables = get_lst_dct_simulation_variables(dct_simulation_variables, non_null_input_info)
     lst_dct_simulation_variables_of_single_case = get_lst_dct_simulation_variables_of_single_case(lst_dct_simulation_variables)
     lst_dct_simulation_variables_of_single_case = distingush_sim_variable(lst_dct_simulation_variables_of_single_case)
+    
+    
+    
     GenJou(fluent, lst_dct_simulation_variables_of_single_case)
-    
-
-        
-    
-    # dct_simu_para = pm.get_dct_simu_parameters()
-    # dct_result_data = {
-    #     'lst_surface' : pm.output_result_facesname,
-    #     'lst_data' : pm.output_result_dataname
-    # }
-    
-    
-    # fluent.joural_gen_case(pm.case, lst_flow_varibles, dct_simu_para, dct_result_data)
     fluent.runSim_beta(pm.core_number, pm.os_name, pm.fluent_path)
