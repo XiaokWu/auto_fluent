@@ -9,7 +9,7 @@ if pm.on_server and pm.on_venv:
         os.system('chmod +x conf/run_with_venv.sh')
         subprocess.run(['./conf/run_with_venv.sh'])
         sys.exit()  # 退出当前脚本，避免递归调用
-    
+
 
 # 主要逻辑
 import DataUtils.DataProcess as DataProcess
