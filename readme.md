@@ -9,7 +9,7 @@ pip3 install -r requirements.txt
 git update-index --assume-unchanged config.yaml
 ```
 如不需要创建虚拟环境：
-``
+```
 git clone https://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@github.com/XiaokWu/auto_run.git
 cd auto_run
 git pull origin main
