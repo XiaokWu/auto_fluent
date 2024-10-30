@@ -10,6 +10,7 @@ on_venv = config['on_venv']
 core_number = config['core_number']
 os_name = config['os_name']
 fluent_path = config['fluent_path']
+plot_on_server = config['plot_on_server']
 
 folders = config['folders']
 mesh_folder = folders['mesh_folder']
@@ -45,6 +46,14 @@ case_label = outputs_infos['case_label']
 output_result_facesname = outputs_infos['output_result_facesname']
 output_result_dataname = outputs_infos['output_result_dataname']
 output_features = outputs_infos['output_features']
+
+plot_infos = config['plot_infos']
+rename = plot_infos['rename']
+label_feature = plot_infos['label_feature']
+feature_x = plot_infos['x_feature']
+feature_y = plot_infos['y_feature']
+plot_additional_feature = plot_infos['plot_additional_feature']
+
 
 def ReToVelocity(Re, fluid):
     return Re*fluid['viscosity']/(fluid['density']*characteristic_length)

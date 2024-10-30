@@ -1,7 +1,7 @@
 import json
     
 def get_dct_fluid():
-    with open('conf/fluid.json') as f:
+    with open('conf/fluid_database.json') as f:
         dct_fluid = json.load(f)
     return dct_fluid
     

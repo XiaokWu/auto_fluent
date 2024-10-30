@@ -5,16 +5,17 @@ import numpy as np
 
 class Kit:
     """_summary_
+    Kits for dataprocessing
     """
     class fluid:
         
         @staticmethod    
         def get_Re(df, coolent):
-            df['Re'] = df['InflowSpeed']*coolent.density*0.002/coolent.viscosity
+            df['Re'] = df['InflowSpeed']*coolent['density']*0.002/coolent['viscosity']
             
         @staticmethod
         def get_massFlow(df, coolent):
-            df['massFlow'] = df['InflowSpeed']*coolent.density*0.002
+            df['massFlow'] = df['InflowSpeed']*coolent['density']*0.002
             
         @staticmethod
         def get_Delta_P(df):
@@ -28,27 +29,27 @@ class Kit:
         
         @staticmethod
         def get_nusseltNumber(ThermalResistance, coolent, chara_length):
-            return (1/(ThermalResistance*chara_length**2))*chara_length/coolent.thermal_conductivity
+            return (1/(ThermalResistance*chara_length**2))*chara_length/coolent['thermal_conductivity']
 
         @staticmethod
-        def get_ThermalResistance_OFheatsink(heatsink):
+        def get_ThermalResistance_OFheatsink(df):
             HeatFlux = 10000
-            T_heatsink = heatsink['T_max_heatsink']
-            T_mean_fluid = (heatsink['T_outflow']+heatsink['T_inflow'])/2
+            T_heatsink = df['T_max_heatsink']
+            T_mean_fluid = (df['T_outflow']+df['T_inflow'])/2
             Delta_T = T_heatsink-T_mean_fluid
-            heatsink['ThermalResistance'] = Kit.heat().get_ThermalResistance(HeatFlux, Delta_T)
+            df['ThermalResistance'] = Kit.heat().get_ThermalResistance(HeatFlux, Delta_T)
 
         @staticmethod
-        def get_nusseltNumber_OFheatsink(heatsink):
-            heatsink['Nu'] = Kit.heat().get_nusseltNumber(heatsink['ThermalResistance'])
+        def get_nusseltNumber_OFheatsink(df, coolent, chara_length):
+            df['Nu'] = Kit.heat().get_nusseltNumber(df['ThermalResistance'], coolent, chara_length)
 
         @staticmethod
-        def get_Delta_P(heatsink):
-            heatsink['Delta_P'] = heatsink['P_outflow']-heatsink['P_inflow']
+        def get_Delta_P(df):
+            df['Delta_P'] = df['P_outflow']-df['P_inflow']
 
         @staticmethod
-        def get_heatCo(heatsink):
-            heatsink['h/Delta_P'] = -1/heatsink['Delta_P']*heatsink['ThermalResistance']
+        def get_heatCo(df):
+            df['h/Delta_P'] = -1/df['Delta_P']*df['ThermalResistance']
 
 class DataLoader(Kit):    
     def __init__(self, inlet_postion, outlet_postion, output_features, output_folder) -> None:
