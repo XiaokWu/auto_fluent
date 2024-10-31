@@ -117,17 +117,5 @@ def create_jou_line(dct_pram):
 def creat_jou(dct_pram):
     jou = "".join(create_jou_line(dct_pram))
     return jou
-
-if __name__ == "__main__":
-    dct_para = {
-        'velocity':10,
-        'iterate':100,
-        'time_step':10,
-        'convergence_criterion':1e-10,
-        'result_file_path' : "set_result_file_path"
-    }
-    
-    jou = creat_jou(dct_para)
-    print(jou)
     
     

@@ -101,4 +101,5 @@ def analysis_dct_sim_to_jou_args(dct_simulation_variable_single_case):
         
 
     dct_simulation_variable_args.update({'fluid' : lst_fluid_args})
+    print(dct_simulation_variable_args)
     return dct_simulation_variable_args

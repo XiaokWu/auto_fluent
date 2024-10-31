@@ -477,20 +477,28 @@ class AutoFluent:
             lst_jou = os.listdir(self.autofluent.jou_folder)
             
             for jou_file_name in lst_jou:
+                caculated = False
                 sim_name = jou_file_name.replace('.jou','')
-                print(f'\n####################################### {sim_name} #######################################')
-                jou_path = os.path.join(self.autofluent.jou_folder, jou_file_name)
-                if os_name == 'Windows':
-                    # 构建 Fluent 命令
-                    command = f"3ddp -g -t{core_num} -i {jou_path}"
+                for exist_file in os.listdir(self.autofluent.case_folder):
+                    if sim_name in exist_file:
+                        caculated = True
+                        break
+                if not caculated:
+                    print(f'\n####################################### {sim_name} #######################################')
+                    jou_path = os.path.join(self.autofluent.jou_folder, jou_file_name)
+                    if os_name == 'Windows':
+                        # 构建 Fluent 命令
+                        command = f"3ddp -g -t{core_num} -i {jou_path}"
+                    else:
+                        # 构建 Fluent 命令
+                        command = f"3ddp -g -t{core_num} -i {jou_path}"
+                    #执行 Fluent 命令
+                    if fluent_path:
+                        os.system(f'{fluent_path} {command}')
+                    else:
+                        subprocess.run(f'fluent {command}', shell=True)
                 else:
-                    # 构建 Fluent 命令
-                    command = f"3ddp -g -t{core_num} -i {jou_path}"
-                #执行 Fluent 命令
-                if fluent_path:
-                    os.system(f'{fluent_path} {command}')
-                else:
-                    subprocess.run(f'fluent {command}', shell=True)
+                    print(f'{sim_name} have been calculated.')
                     
                 lst_non_directory_files = [item for item in os.listdir() if os.path.isfile(item)]
                 for item in lst_non_directory_files:

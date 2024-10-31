@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import src.conf.liquids as liq
 
 
 class Kit:
@@ -9,12 +10,17 @@ class Kit:
     class fluid:
         
         @staticmethod    
-        def get_Re(df, coolent):
-            df['Re'] = df['InflowSpeed']*coolent['density']*0.002/coolent['viscosity']
+        def get_Re(df, chara_length):
+            coolent = liq.get_dct_fluid(df['fluid'])[1]
+            density = coolent['density']
+            viscosity = coolent['viscosity']
+            df['Re'] = df['InflowSpeed']*density*chara_length/viscosity
             
         @staticmethod
-        def get_massFlow(df, coolent):
-            df['massFlow'] = df['InflowSpeed']*coolent['density']*0.002
+        def get_massFlow(df, chara_length):
+            coolent = liq.get_dct_fluid(df['fluid'])[1]
+            density = coolent['density']
+            df['massFlow'] = df['InflowSpeed']*coolent['density']*chara_length
             
         @staticmethod
         def get_Delta_P(df):
@@ -27,20 +33,33 @@ class Kit:
             return Delta_T/(heatFlux*heatSurface)
         
         @staticmethod
-        def get_nusseltNumber(ThermalResistance, coolent, chara_length):
-            return (1/(ThermalResistance*chara_length**2))*chara_length/coolent['thermal_conductivity']
+        def get_convertive_cof(heatFlux, Delta_T):
+            return heatFlux/Delta_T
+        
+        @staticmethod
+        def get_nusseltNumber(h, coolent, chara_length):
+            return h*chara_length/coolent['thermal_conductivity']
 
         @staticmethod
         def get_ThermalResistance_OFheatsink(df):
-            HeatFlux = 10000
+            HeatFlux = df['heatflux']
             T_heatsink = df['T_max_heatsink']
             T_mean_fluid = (df['T_outflow']+df['T_inflow'])/2
             Delta_T = T_heatsink-T_mean_fluid
             df['ThermalResistance'] = Kit.heat().get_ThermalResistance(HeatFlux, Delta_T)
+            
+        @staticmethod
+        def get_convertive_cof_OFheatsink(df):
+            HeatFlux = df['heatflux']
+            T_heatsink = df['T_max_heatsink']
+            T_mean_fluid = (df['T_outflow']+df['T_inflow'])/2
+            Delta_T = T_heatsink-T_mean_fluid
+            df['h'] = Kit.heat.get_convertive_cof(HeatFlux, Delta_T)
 
         @staticmethod
-        def get_nusseltNumber_OFheatsink(df, coolent, chara_length):
-            df['Nu'] = Kit.heat().get_nusseltNumber(df['ThermalResistance'], coolent, chara_length)
+        def get_nusseltNumber_OFheatsink(df, chara_length):
+            coolent = liq.Extract_fluid(df['fluid'])[1]
+            df['Nu'] = Kit.heat().get_nusseltNumber(df['h'], coolent, chara_length)
 
         @staticmethod
         def get_Delta_P(df):
