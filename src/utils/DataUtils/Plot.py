@@ -1,7 +1,7 @@
-from DataUtils.DataKit import Kit
+from src.utils.DataUtils.DataKit import Kit
 import matplotlib.pyplot as plt
 import pandas as pd
-import conf.liquids as liq
+import src.conf.liquids as liq
 
 
         

@@ -1,0 +1,11 @@
+{
+    "read_case" : "/file/read-case/{inicase}\n",
+    "set_velocity" : "/define/boundary-conditions/set/velocity-inlet/{faces} () vmag no {velocity} q\n",
+    "set_heatflux" : "/define/boundary-conditions/set/wall/{faces} () heat-flux () no {heatfux} q q q\n",
+    "set_fluid" : "/define/boundary-conditions/set/fluid fluid* () material yes {fluid} q",
+    "set_convergence_criterion" : "/solve/set/convergence-criterion {convergence_criterion}\n",
+    "initialize" : "/solve/initialize/hyb-initialization\n",
+    "solve_iterate" : "/solve/iterate {iterations}\n",
+    "write_case" : "/file/write-case-data {case_file_path}.cas\n",
+    "write_result" : "/file/export/ascii {result_path_surface} {surface} () y {datas} q n"
+}

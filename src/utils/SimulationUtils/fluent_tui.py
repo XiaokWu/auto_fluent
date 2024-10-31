@@ -1,3 +1,21 @@
+import json
+
+def get_tui_database(json_path):
+    with open(json_path) as file:
+        tui_database = json.load(file)
+    return tui_database
+
+def format_tui_pras(template, placeholders):
+    """
+    通用接口函数，接受占位符列表和参数列表，返回格式化的字符串
+    """
+    return template.format(**placeholders)
+
+def get_tui_pras(pras_name, placeholders, tui_database):
+    tui_pras_template = tui_database[pras_name]
+    return format_tui_pras(tui_pras_template, placeholders)
+
+
 def set_ini_case(inicase=None):
     tui_pras = f"/file/read-case/{inicase}\n"
     return tui_pras

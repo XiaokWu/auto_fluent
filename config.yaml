@@ -14,7 +14,7 @@ os_name : 'linux'
 #path to fluent
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 #plot on server or not
-plot_on_server : True
+plot_on_server : False
 
 # relative path to related folders. Normally not need to be modified by the user.
 folders:

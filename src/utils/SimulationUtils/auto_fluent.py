@@ -1,6 +1,6 @@
 import os
 import subprocess
-import SimulationUtils.fluent_tui as fluent_tui
+import src.utils.SimulationUtils.fluent_tui as fluent_tui
 
 
 class AutoFluent:

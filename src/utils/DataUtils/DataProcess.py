@@ -1,7 +1,7 @@
 import pandas as pd
-from DataUtils.DataKit import DataLoader_beta as DataLoader
-import conf.Parameters as Parameters
-import DataUtils.Plot as Plot
+from src.utils.DataUtils.DataKit import DataLoader_beta as DataLoader
+import src.conf.Parameters as Parameters
+import src.utils.DataUtils.Plot as Plot
 
 def DataProcess():
     print('\n ###########################################  DataProcess  ###########################################')
