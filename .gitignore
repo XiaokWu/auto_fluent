@@ -3,15 +3,11 @@
 !main.py
 !requirements.txt
 !prepare.py
-!conf/
-!conf/**
-!DataUtils/
-!DataUtils/**
-!SimulationUtils/
-!SimulationUtils/**
+!src/
+!src/**
 !ini_case/
 !ini_case/add_your_case_here.txt
-!readme.md
+!README.md
 
 __pycache__/
 config.yaml

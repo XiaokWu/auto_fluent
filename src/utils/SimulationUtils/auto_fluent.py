@@ -1,6 +1,6 @@
 import os
 import subprocess
-import SimulationUtils.fluent_tui as fluent_tui
+import src.utils.SimulationUtils.fluent_tui as fluent_tui
 
 
 class AutoFluent:
@@ -447,12 +447,72 @@ class AutoFluent:
     class Server:
         def __init__(self, autofluent) -> None:
             self.autofluent = autofluent
+                  
+            
+        def joural_gen_beta(self, sim_name, dct_sim_args, dct_result_data):
+            ini_case = os.path.join(self.autofluent.ini_case_folder,f'{dct_sim_args["case"]}.cas.h5')
+            dct_sim_args = {**{"ini_case": ini_case}, **dct_sim_args}
+            # dct_sim_args = dct_sim_args_new.copy()
+            file_name = sim_name+'.jou'
+            case_file_path = os.path.join(self.autofluent.case_folder,sim_name)
+            result_file_case = f"{sim_name}.csv"
+            lst_surface = dct_result_data['lst_surface']
+            lst_data = dct_result_data['lst_data']
+            result_file_path = os.path.join(self.autofluent.result_folder, result_file_case)
+            lst_result_args = [result_file_path, lst_surface, lst_data]
+            result_dct = {
+                    'write_case': case_file_path,
+                    'write_result': lst_result_args
+            }
+            del dct_sim_args['case']
+            dct_args = {**dct_sim_args, **result_dct}
+            jul = fluent_tui.creat_jou(dct_args)
+            file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.jou_folder, file_name)
+            with open(file_path, 'w') as file:
+                file.write(jul)
+            print(f"journal文件已生成到 {file_path}。")
+            
+        def runSim_beta(self, core_num, os_name, fluent_path = None):
+            os.chdir(self.autofluent.simulation_name)
+            lst_jou = os.listdir(self.autofluent.jou_folder)
+            
+            for jou_file_name in lst_jou:
+                caculated = False
+                sim_name = jou_file_name.replace('.jou','')
+                for exist_file in os.listdir(self.autofluent.case_folder):
+                    if sim_name in exist_file:
+                        caculated = True
+                        break
+                if not caculated:
+                    print(f'\n####################################### {sim_name} #######################################')
+                    jou_path = os.path.join(self.autofluent.jou_folder, jou_file_name)
+                    if os_name == 'Windows':
+                        # 构建 Fluent 命令
+                        command = f"3ddp -g -t{core_num} -i {jou_path}"
+                    else:
+                        # 构建 Fluent 命令
+                        command = f"3ddp -g -t{core_num} -i {jou_path}"
+                    #执行 Fluent 命令
+                    if fluent_path:
+                        os.system(f'{fluent_path} {command}')
+                    else:
+                        subprocess.run(f'fluent {command}', shell=True)
+                else:
+                    print(f'{sim_name} have been calculated.')
+                    
+                lst_non_directory_files = [item for item in os.listdir() if os.path.isfile(item)]
+                for item in lst_non_directory_files:
+                    if 'MPT_Monitor' in item:
+                        os.remove(item)
+            print("Fluent 命令执行完毕。")
+            #self.autofluent.clear_folder(self.autofluent.jou_folder)
+
         
         def joural_gen_case(self, case_name, flow_variable, dct_sim_para, dct_result_data):
             for case in case_name:
                 ini_case = os.path.join(self.autofluent.ini_case_folder,f'{case}.cas.h5')
                 for flow in flow_variable:
-                    velocitys = flow['velocity'] 
+                    velocitys = flow['velocity']
                     i=0
                     for velocity in velocitys:
                         flow_para = flow['val'][i]

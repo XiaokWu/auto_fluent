@@ -1,15 +1,22 @@
-simulation_name : 'test'
+# This is the configuration file for the simulation, which contains all the parameters we need to set in the simulation process.
+
+# The name of the simulation, which will be used as the name of the folder to store every file related to the simulation.
+simulation_name : 'test_beta'
 
 #The simualtion is on server or not
 on_server : True
+#The program is running on the virtual environment or not
 on_venv : True
-#Number of cores in use
-core_number : 2
+#Number of cores you want to use in the simulation
+core_number : 1
 #system type
 os_name : 'linux'
+#path to fluent
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
+#plot on server or not
+plot_on_server : True
 
-# relative path to case folder
+# relative path to related folders. Normally not need to be modified by the user.
 folders:
   mesh_folder : 'mesh'
   ini_case_folder : '../ini_case'
@@ -18,25 +25,74 @@ folders:
   output_folder : 'outputs'
   case_folder : 'case'
 
+# Following parameters are related to the mesh, which are the parameters we need to set in the meshing process：
 
-simluation_parameters:
-  Re : [100]
+# 'case' is the lst of the name of ini_case you apply in 'ini_case' folder
+# 'heatflux' is the lst of heatflux you want to apply on the heatface
+# 'fluid' is the lst of fluid you want to use in the simulation
+# 'Re' is the lst of Reynolds number you want to apply on the simulation
+# 'massflow' is the lst of massflow you want to apply on the simulation
+# 'tem' is the lst of temperature you want to apply on the simulation
+# 'pressure' is the lst of pressure you want to apply on the simulation
+
+# NOTE: every elemeny in the lst will go through the simulation, which means the number of simulation will be the product of the length of every lst. The program will generate every possible combination of the parameters in the lsts.
+
+simulation_variables:
+  case : ['1']
+  heatflux : [10000,10]
+  fluid : ['air','water']
+  Re : [100,200,300,400]
   massflow : [1]
-  heatsink : ['1']
-  heatflux : [100000]
-  fluid : 'water'
+  tem : []
+  pressure : []
+
+# Following parameters are related to the simulation, which are the parameters we need to set in the simulation：
+
+# 'energy_on' is the switch of the energy equation, if it is True, the energy equation will be solved, otherwise, it will not be solved
+# 'iterate' is the number of iterations in the simulation
+# 'velocity_bc_facesname' is the name of the faces you want to set the velocity boundary condition, such as 'inlet', 'outlet', etc.
+# 'heat_bc_facesname' is the name of the faces you want to set the heat boundary condition, such as 'heatface', etc.
+# 'pressure_bc_facename' is the name of the faces you want to set the pressure boundary condition, such as 'inlet', 'outlet', etc.
+simluation_parameters:
+  energy_on : True
   iterate : 500
   velocity_bc_facesname : ['inlet']
-  heatflux_bc_facesname : ['heatface'] 
+  heat_bc_facesname : ['heatface'] 
+  pressure_bc_facename : []
 
+# Following parameters are related to the outputs, which are the results we want to get from the simulation, the reslute will be outputed as .csv file for further processing：
 
+# 'case_label' is the label of the ini_case you apply in 'ini_case' folder, such as 'heatsink', 'cylinder', 'pipe', 'mesh', etc. (NOT functional yet!)
+# 'output_result_facesname' is the name of the faces you want to get the results from, such as 'inlet', 'outlet', 'heatface', etc.
+# 'output_result_dataname' is the name of the physical data you want to get from the simulation, such as 'temperature', 'pressure', 'velocity', etc.
+#'output_features' is the features we want to get from the simulation, which is based on the surface of 'output_result_facesname'. The name of the features should be the same as:'<facename>_<type(avgerage/max)>_<physicalproperty>'
+outputs_infos:
+  case_label : 'heatsink'
+  output_result_facesname : ['inlet', 'outlet', 'heatface']
+  output_result_dataname : ['temperature', 'pressure', 'velocity']
+  output_features : ["inlet_avg_velocity", "outlet_avg_temperature", "heatface_avg_temperature", 'heatface_max_temperature','inlet_avg_temperature','outlet_avg_pressure','inlet_avg_pressure']
+
+# Following parameters are only related to the dataprocessing and ploting part, if simulation is only needed, just ignore them
 geometry:
   inlet_area : 312e-6
   characteristic_length : 0.002
-  base_area : 0.0005
+  base_area : 0.002704
   inlet_position : -3.900000080e-02
   outlet_position : 6.100000000e-02
 
-output_result_facesname : ['inlet', 'outlet', 'heatface']
-output_result_dataname : ['temperature', 'pressure', 'velocity']
-output_features : ['heatsink', 'Re', "inlet_avg_velocity", "outlet_avg_temperature", "heatface_avg_temperature", 'heatface_max_temperature','inlet_avg_temperature','outlet_avg_pressure','inlet_avg_pressure']
+# Following parameters are related to the dataprocessing, which are the parameters we need to set in the dataprocessing process：
+# The ploting unit is totally seperated from the simulation unit!
+# 'rename' is the dictionary of the features we want to rename, the key is the original name of the feature, and the value is the new name of the feature
+plot_infos:
+  rename: {'inlet_avg_velocity':'InflowSpeed',
+        'outlet_avg_temperature':'T_outflow',
+        'heatface_avg_temperature':'T_avg_heatsink',
+        'heatface_max_temperature':'T_max_heatsink',
+        'inlet_avg_temperature':'T_inflow',
+        'inlet_avg_pressure':'P_inflow',
+        'outlet_avg_pressure':'P_outflow'
+        }
+  label_feature : 'heatsink'
+  x_feature : 'Re'
+  y_feature : 'Nu'
+  plot_additional_feature : ['ThermalResistance','Delta_P','h/Delta_P','h','Nu']
