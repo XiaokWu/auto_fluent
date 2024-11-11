@@ -48,6 +48,7 @@ output_result_dataname = outputs_infos['output_result_dataname']
 output_features = outputs_infos['output_features']
 
 plot_infos = config['plot_infos']
+reslut_file_name = plot_infos['reslut_file_name']
 rename = plot_infos['rename']
 label_feature = plot_infos['label_feature']
 feature_x = plot_infos['x_feature']

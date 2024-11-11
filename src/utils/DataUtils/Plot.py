@@ -24,7 +24,6 @@ def plot_data_beta(df, label_feature, feature_x, feature_y):
     plt.show()
     
 def calculate_feature_method(df, feature, add_args=None):
-    # print(f'raw_df##########:{df}')
     dct_calculate_method = {
         'Re': Kit.fluid().get_Re,
         'massflow': Kit.fluid().get_massFlow,
@@ -45,14 +44,13 @@ def calculate_feature(df,dct_gemoetry,lst_addon_faeatures):
     for _ ,row in df.iterrows():
         df_row = row.copy()
         for feature in lst_addon_faeatures:
-            # print(f'feature:{feature}')
             calculate_feature_method(df_row, feature, chara_length)
-            # print(f'##########->calulated_df:{df_row}')  
         df_return = pd.concat([df_return, df_row.to_frame().T], axis=0)
-        # print(f'#############################\n{df_return}')
     return df_return
         
 def plot_beta(df, label_feature, feature_x, feature_y, dct_gemoetry, lst_addon_faeatures):
     Kit.heat().get_convertive_cof_OFheatsink(df)
     df = calculate_feature(df, dct_gemoetry, lst_addon_faeatures)
+    print('##############################################################################################')
+    print(df)
     plot_data_beta(df, label_feature, feature_x, feature_y)

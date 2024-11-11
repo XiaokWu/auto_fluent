@@ -17,7 +17,7 @@ def DataProcess():
         pd.DataFrame.to_csv(value, f'out_{key}.csv',index=False)
     if is_plot():
         check_plot()
-        df = resultLoder('output.csv')
+        df = resultLoder(Parameters.reslut_file_name)
         label_feature, feature_x, feature_y, geometry, plot_additional_feature = Parameters.label_feature, Parameters.feature_x, Parameters.feature_y, Parameters.geometry,Parameters.plot_additional_feature
         Plot.plot_beta(df, label_feature, feature_x, feature_y, geometry, plot_additional_feature)
     

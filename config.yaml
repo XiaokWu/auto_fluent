@@ -84,6 +84,7 @@ geometry:
 # The ploting unit is totally seperated from the simulation unit!
 # 'rename' is the dictionary of the features we want to rename, the key is the original name of the feature, and the value is the new name of the feature
 plot_infos:
+  reslut_file_name : 'output_Pr=0.7.csv'
   rename: {'inlet_avg_velocity':'InflowSpeed',
         'outlet_avg_temperature':'T_outflow',
         'heatface_avg_temperature':'T_avg_heatsink',
@@ -94,5 +95,5 @@ plot_infos:
         }
   label_feature : 'heatsink'
   x_feature : 'Re'
-  y_feature : 'Nu'
+  y_feature : 'T_max_heatsink'
   plot_additional_feature : ['ThermalResistance','Delta_P','h/Delta_P','h','Nu']
