@@ -224,7 +224,7 @@ class DataLoader_beta(DataLoader):
         lst_result = os.listdir(result_folder)
         lst_result.sort()
         for result in lst_result:
-            result_variable = result.split('.')[0].split('_')[0]
+            result_variable = result.split('.')[0].split('|')[0]
             lst_variable = result_variable.split(',')
             lst_variable_name = []
             for variable in lst_variable:
@@ -255,8 +255,8 @@ class DataLoader_beta(DataLoader):
             'min':DataLoader.get_min_value
         }
         result_info = result_file_name.split('.')[0]
-        variable_info = result_info.split('_')[0]
-        result_face = result_info.split('_')[1]
+        variable_info = result_info.split('|')[0]
+        result_face = result_info.split('|')[1]
         list_variables = variable_info.split(',')
         df_result.rename(columns={
             'velocity-magnitude':'velocity'
