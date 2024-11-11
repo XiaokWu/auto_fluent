@@ -31,7 +31,8 @@ def calculate_feature_method(df, feature, add_args=None):
         'h/Delta_P': Kit.heat().get_heatCo,
         'h':Kit.heat().get_convertive_cof_OFheatsink,
         'ThermalResistance': Kit.heat().get_ThermalResistance_OFheatsink,
-        'Nu': Kit.heat().get_nusseltNumber_OFheatsink
+        'Nu': Kit.heat().get_nusseltNumber_OFheatsink,
+        'Pr': Kit.heat().get_prandtlNumber
     }
     try:
         dct_calculate_method[feature](df, add_args)

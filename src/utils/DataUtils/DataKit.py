@@ -20,7 +20,7 @@ class Kit:
         def get_massFlow(df, chara_length):
             coolent = liq.get_dct_fluid(df['fluid'])[1]
             density = coolent['density']
-            df['massFlow'] = df['InflowSpeed']*coolent['density']*chara_length
+            df['massFlow'] = df['InflowSpeed']*density*chara_length
             
         @staticmethod
         def get_Delta_P(df):
@@ -68,6 +68,11 @@ class Kit:
         @staticmethod
         def get_heatCo(df):
             df['h/Delta_P'] = -1/df['Delta_P']*df['ThermalResistance']
+            
+        @staticmethod
+        def get_prandtlNumber(df):
+            coolent = liq.Extract_fluid(df['fluid'])[1]
+            df['Pr'] = coolent['prandtl']
 
 class DataLoader(Kit):    
     def __init__(self, inlet_postion, outlet_postion, output_features, output_folder) -> None:

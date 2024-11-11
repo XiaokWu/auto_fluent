@@ -39,5 +39,25 @@
     "thermal_conductivity": 8.3,
     "thermal_expansion": 0.000181,
     "prandtl": 0.015
+    },
+    "gasoil": {
+    "name": ["gasoil", "Gasoil","Pr_70"],
+    "density" : 830.0,
+    "viscosity": 0.000343,
+    "specific_heat": 2050.0,
+    "thermal_diffusivity": 0.000001,
+    "thermal_conductivity": 0.1,
+    "thermal_expansion": 0.0008,
+    "prandtl": 70.0
+    },
+    "glycol": {
+    "name": ["glycol", "Glycol"],
+    "density" : 1100.0,
+    "viscosity": 0.001,
+    "specific_heat": 2500.0,
+    "thermal_diffusivity": 0.000001,
+    "thermal_conductivity": 0.15,
+    "thermal_expansion": 0.0008,
+    "prandtl": 1000.0
     }
 }
