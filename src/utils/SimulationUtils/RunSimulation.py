@@ -29,30 +29,31 @@ def GenJou(fluent, lst_dct_simulation_variables_of_single_case):
     
 
 def RunSimulation():
-    
-    Fluent = AutoFluent(pm.simulation_name, pm.mesh_folder, pm.case_folder, pm.result_folder, pm.jou_folder, pm.ini_case_folder)
-    Fluent.initial()
-    
-    if pm.on_server:
-        fluent = AutoFluent.Server(Fluent)
-    else:
-        fluent = AutoFluent.Local(Fluent)
-    
-    
-    
-    dct_simulation_variables= pm.simulation_variables.copy()  
-    non_null_input_info = pm.get_non_null_input_info(dct_simulation_variables)
-    lst_key = pm.simulation_variables.keys()
-    for key in lst_key:
-        if len(pm.simulation_variables[key]) == 0:
-            #删去不包含输入的模拟变量
-            del dct_simulation_variables[key]
-    
-    lst_dct_simulation_variables = InputEngine.get_lst_dct_simulation_variables(dct_simulation_variables, non_null_input_info)
-    lst_dct_simulation_variables_of_single_case = InputEngine.get_lst_dct_simulation_variables_of_single_case(lst_dct_simulation_variables)
-    lst_dct_simulation_variables_of_single_case = InputEngine.distingush_sim_variable(lst_dct_simulation_variables_of_single_case)
-    
-    
-    
-    GenJou(fluent, lst_dct_simulation_variables_of_single_case)
-    fluent.runSim_beta(pm.core_number, pm.os_name, pm.fluent_path)
+    if not pm.dataprocessing_only:
+        Fluent = AutoFluent(pm.simulation_name, pm.mesh_folder, pm.case_folder, pm.result_folder, pm.jou_folder, pm.ini_case_folder)
+        Fluent.initial()
+        
+        if pm.on_server:
+            fluent = AutoFluent.Server(Fluent)
+        else:
+            fluent = AutoFluent.Local(Fluent)
+        
+        
+        
+        dct_simulation_variables= pm.simulation_variables.copy()  
+        non_null_input_info = pm.get_non_null_input_info(dct_simulation_variables)
+        lst_key = pm.simulation_variables.keys()
+        for key in lst_key:
+            if len(pm.simulation_variables[key]) == 0:
+                #删去不包含输入的模拟变量
+                del dct_simulation_variables[key]
+        
+        lst_dct_simulation_variables = InputEngine.get_lst_dct_simulation_variables(dct_simulation_variables, non_null_input_info)
+        lst_dct_simulation_variables_of_single_case = InputEngine.get_lst_dct_simulation_variables_of_single_case(lst_dct_simulation_variables)
+        lst_dct_simulation_variables_of_single_case = InputEngine.distingush_sim_variable(lst_dct_simulation_variables_of_single_case)
+        
+        
+        
+        GenJou(fluent, lst_dct_simulation_variables_of_single_case)
+        print(' ###########################################  Simulation  ###########################################\n\n')
+        fluent.runSim_beta(pm.core_number, pm.os_name, pm.fluent_path)
