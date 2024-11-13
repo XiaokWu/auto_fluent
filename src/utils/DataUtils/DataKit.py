@@ -224,23 +224,26 @@ class DataLoader_beta(DataLoader):
         lst_result = os.listdir(result_folder)
         lst_result.sort()
         for result in lst_result:
-            result_variable = result.split('.')[0].split('|')[0]
-            lst_variable = result_variable.split(',')
-            lst_variable_name = []
-            for variable in lst_variable:
-                variable_name = DataLoader.get_variable_info(variable)[0]
-                lst_variable_name.append(variable_name)
-            if not dct_result:
-                key = ','.join(lst_variable_name)
-                dct_result[key] = [result]
+            if '.csv' not in result:
+                continue
             else:
-                for key in dct_result.keys():
-                    if DataLoader.same_list(lst_variable_name, key.split(',')):
-                        dct_result[key].append(result)
-                        break
-                else:
+                result_variable = result.split('.')[0].split('|')[0]
+                lst_variable = result_variable.split(',')
+                lst_variable_name = []
+                for variable in lst_variable:
+                    variable_name = DataLoader.get_variable_info(variable)[0]
+                    lst_variable_name.append(variable_name)
+                if not dct_result:
                     key = ','.join(lst_variable_name)
                     dct_result[key] = [result]
+                else:
+                    for key in dct_result.keys():
+                        if DataLoader.same_list(lst_variable_name, key.split(',')):
+                            dct_result[key].append(result)
+                            break
+                    else:
+                        key = ','.join(lst_variable_name)
+                        dct_result[key] = [result]
         return dct_result
     
     
