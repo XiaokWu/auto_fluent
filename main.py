@@ -16,6 +16,8 @@ import src.utils.DataUtils.DataProcess as DataProcess
 import src.utils.SimulationUtils.RunSimulation as RunSimulation
 subprocess.run(['pip3', 'install', '-r', 'requirements.txt'])
 
-print('\n\n\n#######################################################  Simulation Start #######################################################')
+print('\n\n\n#######################################################  Prograss Start #######################################################')
 RunSimulation.RunSimulation()
+if pm.dataprocessing_only:
+    os.chdir(pm.simulation_name)
 DataProcess.DataProcess()

@@ -11,6 +11,7 @@ core_number = config['core_number']
 os_name = config['os_name']
 fluent_path = config['fluent_path']
 plot_on_server = config['plot_on_server']
+dataprocessing_only = config['dataprocessing_only']
 
 folders = config['folders']
 mesh_folder = folders['mesh_folder']
