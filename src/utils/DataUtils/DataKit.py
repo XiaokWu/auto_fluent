@@ -224,7 +224,7 @@ class DataLoader_beta(DataLoader):
         lst_result = os.listdir(result_folder)
         lst_result.sort()
         for result in lst_result:
-            result_variable = result.split('.')[0].split('_')[0]
+            result_variable = result.split('.')[0].split('|')[0]
             lst_variable = result_variable.split(',')
             lst_variable_name = []
             for variable in lst_variable:
@@ -255,8 +255,8 @@ class DataLoader_beta(DataLoader):
             'min':DataLoader.get_min_value
         }
         result_info = result_file_name.split('.')[0]
-        variable_info = result_info.split('_')[0]
-        result_face = result_info.split('_')[1]
+        variable_info = result_info.split('|')[0]
+        result_face = result_info.split('|')[1]
         list_variables = variable_info.split(',')
         df_result.rename(columns={
             'velocity-magnitude':'velocity'
@@ -301,7 +301,7 @@ class DataLoader_beta(DataLoader):
                 result_info = result.split('.')[0]
                 try:
                     print(f'Processing file : {result}')
-                    result_face = result_info.split('_')[1]
+                    result_face = result_info.split('|')[1]
                     if result_face in dct_feature_info.keys():#保证结果文件的面信息在输出特征中
                         df_result = pd.read_csv(os.path.join(result_folder, result))
                         df_result.columns = df_result.columns.str.strip()
@@ -316,7 +316,7 @@ class DataLoader_beta(DataLoader):
                             if not output_data_line.empty:
                                 output_data = pd.concat([output_data, output_data_line[output_features]], axis=0)
                             output_data_line = pd.DataFrame()
-                except (KeyError):
+                except (KeyError, IndexError):
                     print(f'结果文件{result}格式错误')
             dct_output_data[group_name] = output_data
         return dct_output_data

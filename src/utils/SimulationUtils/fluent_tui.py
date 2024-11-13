@@ -85,7 +85,7 @@ def write_result(lst_result_args):
     for data in lst_data:
         datas = f"{datas} {data}"
     for surface in lst_surface:
-        result_path_surface = result_path.replace('.csv',f'_{surface}.csv')
+        result_path_surface = result_path.replace('.csv',f'|{surface}.csv')
         tui_surface = f"/file/export/ascii {result_path_surface} {surface} () y {datas} q n"
         if surface == lst_surface[0]:
             tui_paras = tui_surface

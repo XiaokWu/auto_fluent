@@ -479,7 +479,7 @@ class AutoFluent:
             for jou_file_name in lst_jou:
                 caculated = False
                 sim_name = jou_file_name.replace('.jou','')
-                for exist_file in os.listdir(self.autofluent.case_folder):
+                for exist_file in os.listdir(self.autofluent.result_folder):
                     if sim_name in exist_file:
                         caculated = True
                         break
