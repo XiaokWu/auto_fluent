@@ -27,7 +27,7 @@ folders:
 
 # Following parameters are related to the mesh, which are the parameters we need to set in the meshing process：
 
-# 'case' is the lst of the name of ini_case you apply in 'ini_case' folder
+# 'case' is the lst of the name of ini_case you apply in 'ini_case' folder, DO NOT use ',' and '|' in the name of the case, this will cause error in the data processing part.
 # 'heatflux' is the lst of heatflux you want to apply on the heatface
 # 'fluid' is the lst of fluid you want to use in the simulation
 # 'Re' is the lst of Reynolds number you want to apply on the simulation
@@ -84,7 +84,7 @@ geometry:
 # The ploting unit is totally seperated from the simulation unit!
 # 'rename' is the dictionary of the features we want to rename, the key is the original name of the feature, and the value is the new name of the feature
 plot_infos:
-  reslut_file_name : 'output_Pr=0.7.csv'
+  reslut_file_name : 'out_case,Re,heatflux,fluid.csv'
   rename: {'inlet_avg_velocity':'InflowSpeed',
         'outlet_avg_temperature':'T_outflow',
         'heatface_avg_temperature':'T_avg_heatsink',
