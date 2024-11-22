@@ -17,16 +17,28 @@ class Kit:
             df['Re'] = df['InflowSpeed']*density*chara_length/viscosity
             
         @staticmethod
-        def get_massFlow(df, chara_length):
+        def get_massFlow(df, inlet_area):
             coolent = liq.get_dct_fluid(df['fluid'])[1]
             density = coolent['density']
-            df['massFlow'] = df['InflowSpeed']*density*chara_length
+            df['massFlow'] = df['InflowSpeed']*density*inlet_area
             
         @staticmethod
         def get_Delta_P(df):
-            df['Delta_P'] = df['P_outflow']-df['P_inflow']
+            df['Delta_P'] = df['P_inflow']-df['P_outflow']
+            
+        @staticmethod
+        def get_pumpingPower(df):
+            df['PumpingPower'] = df['Delta_P']*df['InflowSpeed']
 
     class heat:
+        @staticmethod
+        def define_delta_T(inflow_velocity, heatflux, T_inflow, T_heatsink, basearea, fluid, inlet_area):
+            delta_T =T_heatsink - (heatflux*basearea/(inlet_area*inflow_velocity*fluid['density']*fluid['specific_heat'])+2*T_inflow)/2
+            return delta_T
+        
+        @staticmethod
+        def get_dimensionless_temperature(T_local, T_refence, T_max):
+            return (T_local-T_refence)/(T_max-T_refence)
         
         @staticmethod
         def get_ThermalResistance(heatFlux, Delta_T, heatSurface=0.052**2):
@@ -39,40 +51,55 @@ class Kit:
         @staticmethod
         def get_nusseltNumber(h, coolent, chara_length):
             return h*chara_length/coolent['thermal_conductivity']
-
+        
+        @staticmethod
+        def define_delta_TOFheatsink(df):
+            pass
         @staticmethod
         def get_ThermalResistance_OFheatsink(df):
             HeatFlux = df['heatflux']
             T_heatsink = df['T_max_heatsink']
-            T_mean_fluid = (df['T_outflow']+df['T_inflow'])/2
-            Delta_T = T_heatsink-T_mean_fluid
+            T_inflow = df['T_inflow']
+            coolent = liq.Extract_fluid(df['fluid'])[1]
+            Delta_T = Kit.heat().define_delta_T(df['InflowSpeed'], HeatFlux, T_inflow, T_heatsink, 0.002579, coolent, 496.496e-6)
             df['ThermalResistance'] = Kit.heat().get_ThermalResistance(HeatFlux, Delta_T)
             
         @staticmethod
         def get_convertive_cof_OFheatsink(df):
             HeatFlux = df['heatflux']
             T_heatsink = df['T_max_heatsink']
-            T_mean_fluid = (df['T_outflow']+df['T_inflow'])/2
-            Delta_T = T_heatsink-T_mean_fluid
+            T_inflow = df['T_inflow']
+            print(df['fluid'])
+            coolent = liq.Extract_fluid(df['fluid'])[1]
+            Delta_T = Kit.heat().define_delta_T(df['InflowSpeed'], HeatFlux, T_inflow, T_heatsink, 0.002579, coolent, 496.496e-6)
             df['h'] = Kit.heat.get_convertive_cof(HeatFlux, Delta_T)
 
         @staticmethod
         def get_nusseltNumber_OFheatsink(df, chara_length):
             coolent = liq.Extract_fluid(df['fluid'])[1]
             df['Nu'] = Kit.heat().get_nusseltNumber(df['h'], coolent, chara_length)
+            
+        @staticmethod
+        def trans_dimensionless_temperature_OFdf(df,column_name, column_name_max):
+            T_max = df[column_name_max]
+            df[column_name] = Kit.heat().get_dimensionless_temperature(df[column_name], df['T_inflow'], T_max)
 
         @staticmethod
         def get_Delta_P(df):
-            df['Delta_P'] = df['P_outflow']-df['P_inflow']
+            df['Delta_P'] = df['P_inflow']-df['P_outflow']
 
         @staticmethod
         def get_heatCo(df):
-            df['h/Delta_P'] = -1/df['Delta_P']*df['ThermalResistance']
+            df['h/Delta_P'] = 1/df['Delta_P']*df['ThermalResistance']*10**4
             
         @staticmethod
         def get_prandtlNumber(df):
             coolent = liq.Extract_fluid(df['fluid'])[1]
             df['Pr'] = coolent['prandtl']
+            
+        @staticmethod
+        def get_power_ratio(df):
+            df['PowerRatio'] = df['PumpingPower']/df['heatflux']
 
 class DataLoader(Kit):    
     def __init__(self, inlet_postion, outlet_postion, output_features, output_folder) -> None:

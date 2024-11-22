@@ -5,16 +5,17 @@ import src.utils.DataUtils.Plot as Plot
 
 def DataProcess():
     print('\n ###########################################  DataProcess  ###########################################')
-    print('##################################  Extracting data from the result file  ###############################')
-    dct_output_data = DataLoader.output(Parameters.result_folder,Parameters.outputs_infos)
-    print('\n \n ##################################  Data extraction completed  #######################################\n\n')
-    for key, value in dct_output_data.items():
-        value.rename(columns={
-            'case':Parameters.outputs_infos['case_label']
-        }, inplace=True)
-        print(f'\n\n#######################{key} : {value.shape}#######################')
-        print(value)
-        pd.DataFrame.to_csv(value, f'out_{key}.csv',index=False)
+    if not Parameters.plot_only:
+        print('##################################  Extracting data from the result file  ###############################')
+        dct_output_data = DataLoader.output(Parameters.result_folder,Parameters.outputs_infos)
+        print('\n \n ##################################  Data extraction completed  #######################################\n\n')
+        for key, value in dct_output_data.items():
+            value.rename(columns={
+                'case':Parameters.outputs_infos['case_label']
+            }, inplace=True)
+            print(f'\n\n#######################{key} : {value.shape}#######################')
+            print(value)
+            pd.DataFrame.to_csv(value, f'out_{key}.csv',index=False)
     if is_plot():
         check_plot()
         df = resultLoder(Parameters.reslut_file_name)
