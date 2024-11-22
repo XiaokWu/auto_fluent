@@ -23,7 +23,7 @@ def plot_data_beta(df, label_feature, feature_x, feature_y):
     plt.tight_layout()
     plt.show()
     
-def calculate_feature_method(df, feature, add_args=None):
+def calculate_feature_method(df, feature, add_args):
     dct_calculate_method = {
         'Re': Kit.fluid().get_Re,
         'massflow': Kit.fluid().get_massFlow,
@@ -32,7 +32,9 @@ def calculate_feature_method(df, feature, add_args=None):
         'h':Kit.heat().get_convertive_cof_OFheatsink,
         'ThermalResistance': Kit.heat().get_ThermalResistance_OFheatsink,
         'Nu': Kit.heat().get_nusseltNumber_OFheatsink,
-        'Pr': Kit.heat().get_prandtlNumber
+        'Pr': Kit.heat().get_prandtlNumber,
+        'PumpingPower': Kit.fluid().get_pumpingPower,
+        'PowerRatio': Kit.heat().get_power_ratio
     }
     try:
         dct_calculate_method[feature](df, add_args)
@@ -42,15 +44,16 @@ def calculate_feature_method(df, feature, add_args=None):
 def calculate_feature(df,dct_gemoetry,lst_addon_faeatures):
     df_return = pd.DataFrame()
     chara_length = dct_gemoetry['characteristic_length']
+    base_area = dct_gemoetry['base_area']
     for _ ,row in df.iterrows():
         df_row = row.copy()
         for feature in lst_addon_faeatures:
             calculate_feature_method(df_row, feature, chara_length)
         df_return = pd.concat([df_return, df_row.to_frame().T], axis=0)
+    # Kit.heat.trans_dimensionless_temperature_OFdf(df,'T_max_heatsink')
     return df_return
         
 def plot_beta(df, label_feature, feature_x, feature_y, dct_gemoetry, lst_addon_faeatures):
-    Kit.heat().get_convertive_cof_OFheatsink(df)
     df = calculate_feature(df, dct_gemoetry, lst_addon_faeatures)
     print('##############################################################################################')
     print(df)

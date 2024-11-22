@@ -12,6 +12,7 @@ os_name = config['os_name']
 fluent_path = config['fluent_path']
 plot_on_server = config['plot_on_server']
 dataprocessing_only = config['dataprocessing_only']
+plot_only = config['plot_only']
 
 folders = config['folders']
 mesh_folder = folders['mesh_folder']
@@ -39,6 +40,7 @@ pressure_bc_name = simulation_parameters['pressure_bc_facename']
 geometry = config['geometry']
 inlet_area = float(geometry['inlet_area'])
 characteristic_length = geometry['characteristic_length']
+base_area = geometry['base_area']
 inlet_position = geometry['inlet_position']
 outlet_position = geometry['outlet_position']
 
