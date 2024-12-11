@@ -113,13 +113,12 @@ def parameters_check():
                 non_null_num +=1
                 break
         if non_null_num == 0:
-            if (energy_on and key == 'heat') or key == 'pressure':
-                pass
-            else:
-                null_info.append(key)
+            null_info.append(key)
     
     if len(null_info) != 0:
-        if 'velocity' and 'pressure' in null_info:
+        print(f"Null input in {null_info}")
+        if ('velocity' in null_info) and ('pressure' in null_info):
             raise ValueError(f"No input in velocity and pressure")
-
+        elif 'heat' in null_info and energy_on:
+            raise ValueError(f"No input in heat")
 parameters_check()

@@ -43,7 +43,7 @@ folders:
 
 simulation_variables:
   case : ['Pr_7']
-  heatflux : [10000,10]
+  heatflux : [100]
   fluid : ['air']
   Re : []
   massflow : []
