@@ -29,7 +29,7 @@ def GenJou(fluent, lst_dct_simulation_variables_of_single_case):
     
 
 def RunSimulation():
-    if not pm.dataprocessing_only:
+    if pm.dataprocessing_only == False:
         Fluent = AutoFluent(pm.simulation_name, pm.mesh_folder, pm.case_folder, pm.result_folder, pm.jou_folder, pm.ini_case_folder)
         Fluent.initial()
         
