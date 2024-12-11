@@ -57,4 +57,5 @@ def plot_beta(df, label_feature, feature_x, feature_y, dct_gemoetry, lst_addon_f
     df = calculate_feature(df, dct_gemoetry, lst_addon_faeatures)
     print('##############################################################################################')
     print(df)
+    pd.DataFrame.to_csv(df, 'full_data.csv', index=False)
     plot_data_beta(df, label_feature, feature_x, feature_y)

@@ -28,7 +28,8 @@ class Kit:
             
         @staticmethod
         def get_pumpingPower(df):
-            df['PumpingPower'] = df['Delta_P']*df['InflowSpeed']
+            fluid = liq.Extract_fluid(df['fluid'])[1]
+            df['PumpingPower'] = df['Delta_P']*df['InflowSpeed']*fluid['density']
 
     class heat:
         @staticmethod
@@ -69,7 +70,6 @@ class Kit:
             HeatFlux = df['heatflux']
             T_heatsink = df['T_max_heatsink']
             T_inflow = df['T_inflow']
-            print(df['fluid'])
             coolent = liq.Extract_fluid(df['fluid'])[1]
             Delta_T = Kit.heat().define_delta_T(df['InflowSpeed'], HeatFlux, T_inflow, T_heatsink, 0.002579, coolent, 496.496e-6)
             df['h'] = Kit.heat.get_convertive_cof(HeatFlux, Delta_T)

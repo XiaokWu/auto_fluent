@@ -14,11 +14,11 @@ os_name : 'linux'
 #path to fluent
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 #plot on server or not
-plot_on_server : True
+plot_on_server : False
 #if only dataprocessing is needed, set it to True will skip the simulation part, default is False.
-dataprocessing_only : True
+dataprocessing_only : False
 #if only ploting is needed, set it to True will skip the simulation and dataprocessing part, default is False.
-plot_only : True
+plot_only : False
 
 # relative path to related folders. Normally not need to be modified by the user.
 folders:
@@ -98,6 +98,6 @@ plot_infos:
         'outlet_avg_pressure':'P_outflow'
         }
   label_feature : 'heatsink'
-  x_feature : 'Re'
+  x_feature : 'PumpingPower'
   y_feature : 'Nu'
   plot_additional_feature : ['ThermalResistance','Delta_P','h/Delta_P','h','Nu','Pr','PumpingPower','PowerRatio']
