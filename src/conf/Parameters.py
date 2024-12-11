@@ -105,6 +105,7 @@ def get_non_null_input_info(simulation_variables):
 
 def parameters_check():
     input_info = get_inputs_info()
+    null_info = []
     for key, value in input_info.items():
         non_null_num = 0
         for variable in value:
@@ -115,6 +116,10 @@ def parameters_check():
             if (energy_on and key == 'heat') or key == 'pressure':
                 pass
             else:
-                raise ValueError(f"No input in {key}")
+                null_info.append(key)
+    
+    if len(null_info) != 0:
+        if 'velocity' and 'pressure' in null_info:
+            raise ValueError(f"No input in velocity and pressure")
 
 parameters_check()
