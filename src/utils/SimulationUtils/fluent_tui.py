@@ -30,7 +30,7 @@ def set_velocity(lst_velocity_args=None):
     velocity = lst_velocity_args[0]
     lst_faces = lst_velocity_args[1]
     faces = ''
-    if not velocity:    
+    if not velocity and velocity != 0:
         return None
     for face in lst_faces:
         faces = f"{faces} {face}"

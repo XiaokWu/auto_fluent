@@ -42,13 +42,13 @@ folders:
 # NOTE: every elemeny in the lst will go through the simulation, which means the number of simulation will be the product of the length of every lst. The program will generate every possible combination of the parameters in the lsts.
 
 simulation_variables:
-  case : ['Pr_7','Pr_10']
+  case : ['Pr_7']
   heatflux : [10000,10]
-  fluid : ['air','water']
-  Re : [100,200,300,400]
-  massflow : [1]
+  fluid : ['air']
+  Re : []
+  massflow : []
   tem : []
-  pressure : []
+  pressure : [1]
 
 # Following parameters are related to the simulation, which are the parameters we need to set in the simulation：
 
