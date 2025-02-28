@@ -13,6 +13,7 @@ fluent_path = config['fluent_path']
 plot_on_server = config['plot_on_server']
 dataprocessing_only = config['dataprocessing_only']
 plot_only = config['plot_only']
+extracting_mode = config['extracting_mode']
 
 folders = config['folders']
 mesh_folder = folders['mesh_folder']

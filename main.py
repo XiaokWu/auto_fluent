@@ -18,6 +18,6 @@ subprocess.run(['pip3', 'install', '-r', 'requirements.txt'])
 
 print('\n\n\n#######################################################  Prograss Start #######################################################')
 RunSimulation.RunSimulation()
-if pm.dataprocessing_only:
+if pm.dataprocessing_only == True:
     os.chdir(pm.simulation_name)
-# DataProcess.DataProcess()
+DataProcess.DataProcess()

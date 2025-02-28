@@ -14,11 +14,11 @@ os_name : 'linux'
 #path to fluent
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 #plot on server or not
-plot_on_server : False
+plot_on_server : True
 #if only dataprocessing is needed, set it to True will skip the simulation part, default is False.
-dataprocessing_only : False
+dataprocessing_only : True
 #if only ploting is needed, set it to True will skip the simulation and dataprocessing part, default is False.
-plot_only : False
+plot_only : True
 
 # relative path to related folders. Normally not need to be modified by the user.
 folders:
@@ -45,7 +45,7 @@ simulation_variables:
   case : ['Pr_7']
   heatflux : [100]
   fluid : ['air']
-  Re : []
+  Re : [1]
   massflow : []
   tem : []
   pressure : [1]
@@ -88,7 +88,7 @@ geometry:
 # The ploting unit is totally seperated from the simulation unit!
 # 'rename' is the dictionary of the features we want to rename, the key is the original name of the feature, and the value is the new name of the feature
 plot_infos:
-  reslut_file_name : 'output_Pr=7.csv'
+  reslut_file_name : 'output_pr=70.csv'
   rename: {'inlet_avg_velocity':'InflowSpeed',
         'outlet_avg_temperature':'T_outflow',
         'heatface_avg_temperature':'T_avg_heatsink',
