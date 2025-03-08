@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import src.conf.liquids as liq
-
+import src.conf.Parameters as Parameters
 
 class Kit:
     """_summary_
@@ -62,7 +62,7 @@ class Kit:
             T_heatsink = df['T_max_heatsink']
             T_inflow = df['T_inflow']
             coolent = liq.Extract_fluid(df['fluid'])[1]
-            Delta_T = Kit.heat().define_delta_T(df['InflowSpeed'], HeatFlux, T_inflow, T_heatsink, 0.002579, coolent, 496.496e-6)
+            Delta_T = Kit.heat().define_delta_T(df['InflowSpeed'], HeatFlux, T_inflow, T_heatsink, Parameters.base_area, coolent, Parameters.inlet_area)
             df['ThermalResistance'] = Kit.heat().get_ThermalResistance(HeatFlux, Delta_T)
             
         @staticmethod
@@ -71,7 +71,7 @@ class Kit:
             T_heatsink = df['T_max_heatsink']
             T_inflow = df['T_inflow']
             coolent = liq.Extract_fluid(df['fluid'])[1]
-            Delta_T = Kit.heat().define_delta_T(df['InflowSpeed'], HeatFlux, T_inflow, T_heatsink, 0.002579, coolent, 496.496e-6)
+            Delta_T = Kit.heat().define_delta_T(df['InflowSpeed'], HeatFlux, T_inflow, T_heatsink, Parameters.base_area, coolent, Parameters.inlet_area)
             df['h'] = Kit.heat.get_convertive_cof(HeatFlux, Delta_T)
 
         @staticmethod
@@ -142,7 +142,7 @@ class DataLoader(Kit):
     @staticmethod
     def get_variable_info(variable):
         variable_type = variable.split('=')[0]
-        variable_value = variable.split('=')[1] 
+        variable_value = variable.replace(variable_type+'=', '')
         return variable_type, variable_value
 
     @staticmethod
@@ -330,7 +330,7 @@ class DataLoader_beta(DataLoader):
             for result in lst_result:
                 result_info = result.split('.')[0]
                 try:
-                    print(f'Processing file : {result}')
+                    case_info = result_info.split('|')[0]
                     result_face = result_info.split('|')[1]
                     if result_face in dct_feature_info.keys():#保证结果文件的面信息在输出特征中
                         df_result = pd.read_csv(os.path.join(result_folder, result))
@@ -338,14 +338,35 @@ class DataLoader_beta(DataLoader):
                         addon = DataLoader_beta.extract_data_from_file(df_result, result, dct_feature_info)#提取数据
                         if output_data_line.empty:
                             output_data_line = addon
+                            current_case_info = case_info
+                            print(f'\n------------------------ case: {current_case_info}结果文件提取中 ------------------------\n')
+                            print(f'Processed file : {result}')
                         else:
-                            output_data_line = pd.merge(output_data_line, addon, on = dct_feature_info['variable'])
+                            if current_case_info == case_info:
+                                output_data_line = pd.merge(output_data_line, addon, on = dct_feature_info['variable'])
+                                print(f'Processed file : {result}')
+                            else:   
+                                print(f'\n -----------!!!!!!!!!!-------------\n 算例: {current_case_info}结果文件不全 \n -----------!!!!!!!!!!-------------\n')
+                                # 排除空或全NA的条目
+                                # output_data_line = output_data_line.dropna(how='all')
+                                # if not output_data_line.empty:
+                                #     output_data = pd.concat([output_data, output_data_line[output_features]], axis=0)
+                                # output_data_line = pd.DataFrame()
+                                print(f'------------------------ case: {current_case_info}结果文件提取完成 ------------------------\n')
+                                output_data_line = addon
+                                current_case_info = case_info
+                                print(f'\n------------------------ case: {current_case_info}结果文件提取中 ------------------------\n')
+                                print(f'Processed file : {result}')
+                                
                         if len(output_data_line.columns)==len(output_features):
                             # 排除空或全NA的条目
                             output_data_line = output_data_line.dropna(how='all')
                             if not output_data_line.empty:
                                 output_data = pd.concat([output_data, output_data_line[output_features]], axis=0)
                             output_data_line = pd.DataFrame()
+                                
+                        # else:
+                        #     print(f'Processed file : {result}')
                 except (KeyError, IndexError):
                     print(f'结果文件{result}格式错误')
             dct_output_data[group_name] = output_data
