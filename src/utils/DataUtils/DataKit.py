@@ -11,16 +11,17 @@ class Kit:
         
         @staticmethod    
         def get_Re(df, chara_length):
-            coolent = liq.get_dct_fluid(df['fluid'])[1]
+            coolent = liq.Extract_fluid(df['fluid'])[1]
             density = coolent['density']
             viscosity = coolent['viscosity']
             df['Re'] = df['InflowSpeed']*density*chara_length/viscosity
             
         @staticmethod
-        def get_massFlow(df, inlet_area):
-            coolent = liq.get_dct_fluid(df['fluid'])[1]
+        def get_massFlow(df):
+            coolent = liq.Extract_fluid(df['fluid'])[1]
             density = coolent['density']
-            df['massFlow'] = df['InflowSpeed']*density*inlet_area
+            inlet_area = Parameters.inlet_area
+            df['massflow'] = df['InflowSpeed']*density*inlet_area
             
         @staticmethod
         def get_Delta_P(df):
@@ -28,8 +29,8 @@ class Kit:
             
         @staticmethod
         def get_pumpingPower(df):
-            fluid = liq.Extract_fluid(df['fluid'])[1]
-            df['PumpingPower'] = df['Delta_P']*df['InflowSpeed']*fluid['density']
+            inlet_area = Parameters.inlet_area
+            df['PumpingPower'] = df['Delta_P']*df['InflowSpeed']*inlet_area
 
     class heat:
         @staticmethod
@@ -364,9 +365,7 @@ class DataLoader_beta(DataLoader):
                             if not output_data_line.empty:
                                 output_data = pd.concat([output_data, output_data_line[output_features]], axis=0)
                             output_data_line = pd.DataFrame()
-                                
-                        # else:
-                        #     print(f'Processed file : {result}')
+                            
                 except (KeyError, IndexError):
                     print(f'结果文件{result}格式错误')
             dct_output_data[group_name] = output_data

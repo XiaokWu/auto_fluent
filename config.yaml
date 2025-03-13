@@ -14,11 +14,11 @@ os_name : 'linux'
 #path to fluent
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 #plot on server or not
-plot_on_server : False
+plot_on_server : True
 #if only dataprocessing is needed, set it to True will skip the simulation part, default is False.
 dataprocessing_only : True
 #if only ploting is needed, set it to True will skip the simulation and dataprocessing part, default is False.
-plot_only : False
+plot_only : True
 #extracting mode, if it is True, the program will extract the data from the original fluent case, otherwise, it will not extract the data from the fluent file. If this mode is True, the simulation will not be run. 
 extracting_mode : False
 
@@ -27,7 +27,7 @@ folders:
   mesh_folder : 'mesh'
   ini_case_folder : '../ini_case'
   jou_folder : "jurnal"
-  result_folder : 'd=1_pr=7'
+  result_folder : 'result'
   output_folder : 'outputs'
   case_folder : 'case'
 
@@ -90,7 +90,7 @@ geometry:
 # The ploting unit is totally seperated from the simulation unit!
 # 'rename' is the dictionary of the features we want to rename, the key is the original name of the feature, and the value is the new name of the feature
 plot_infos:
-  reslut_file_name : 'Pr=7_different_d.csv'
+  reslut_file_name : 'out_Pr=7.csv'
   rename: {'inlet_avg_velocity':'InflowSpeed',
         'outlet_avg_temperature':'T_outflow',
         'heatface_avg_temperature':'T_avg_heatsink',
@@ -102,4 +102,4 @@ plot_infos:
   label_feature : 'heatsink'
   x_feature : 'Re'
   y_feature : 'Nu'
-  plot_additional_feature : ['ThermalResistance','Delta_P','h/Delta_P','h','Nu','Pr','PumpingPower','PowerRatio']
+  plot_additional_feature : ['ThermalResistance','massflow','Delta_P','h/Delta_P','h','Nu','Pr','PumpingPower','PowerRatio']
