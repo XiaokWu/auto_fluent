@@ -1,5 +1,6 @@
 import os
 import subprocess
+import logging
 import src.utils.SimulationUtils.fluent_tui as fluent_tui
 
 
@@ -485,6 +486,7 @@ class AutoFluent:
                         break
                 if not caculated:
                     print(f'\n####################################### {sim_name} #######################################')
+                    logging.info(f'Running simulation {sim_name}...')
                     jou_path = os.path.join(self.autofluent.jou_folder, jou_file_name)
                     if os_name == 'Windows':
                         # 构建 Fluent 命令
@@ -497,6 +499,7 @@ class AutoFluent:
                         os.system(f'{fluent_path} {command}')
                     else:
                         subprocess.run(f'fluent {command}', shell=True)
+                    logging.info(f'{sim_name} have been calculated.')
                 else:
                     print(f'{sim_name} have been calculated.')
                     
