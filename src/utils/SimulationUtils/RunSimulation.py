@@ -28,8 +28,14 @@ def GenJou(fluent, lst_dct_simulation_variables_of_single_case):
         fluent.joural_gen_beta(case_name, dct_sim_args, dct_result_data)
     
 
+def simualtionIsRun():
+    if pm.dataprocessing_only or pm.extracting_mode:
+        return False
+    else:    
+        return True
+    
 def RunSimulation():
-    if pm.dataprocessing_only == False:
+    if simualtionIsRun():
         Fluent = AutoFluent(pm.simulation_name, pm.mesh_folder, pm.case_folder, pm.result_folder, pm.jou_folder, pm.ini_case_folder)
         Fluent.initial()
         

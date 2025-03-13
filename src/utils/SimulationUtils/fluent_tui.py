@@ -111,7 +111,9 @@ def create_jou_line(dct_pram):
     }
     for key, value in dct_pram.items():
         if value:
-            yield dct_func[key](value)
+            pras = dct_func[key](value)
+            if pras:
+                yield pras
     yield "\n/exit OK"
             
 def creat_jou(dct_pram):

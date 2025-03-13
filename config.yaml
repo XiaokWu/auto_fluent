@@ -14,11 +14,13 @@ os_name : 'linux'
 #path to fluent
 fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 #plot on server or not
-plot_on_server : False
+plot_on_server : True
 #if only dataprocessing is needed, set it to True will skip the simulation part, default is False.
-dataprocessing_only : False
+dataprocessing_only : True
 #if only ploting is needed, set it to True will skip the simulation and dataprocessing part, default is False.
-plot_only : False
+plot_only : True
+#extracting mode, if it is True, the program will extract the data from the original fluent case, otherwise, it will not extract the data from the fluent file. If this mode is True, the simulation will not be run. 
+extracting_mode : False
 
 # relative path to related folders. Normally not need to be modified by the user.
 folders:
@@ -43,9 +45,9 @@ folders:
 
 simulation_variables:
   case : ['Pr_7']
-  heatflux : [10000,10]
+  heatflux : [100]
   fluid : ['air']
-  Re : []
+  Re : [1]
   massflow : []
   tem : []
   pressure : [1]
@@ -80,7 +82,7 @@ outputs_infos:
 geometry:
   inlet_area : 496.496e-6
   characteristic_length : 0.002
-  base_area : 0.002579
+  base_area : 0.002578992
   inlet_position : -3.900000080e-02
   outlet_position : 6.100000000e-02
 
@@ -88,7 +90,7 @@ geometry:
 # The ploting unit is totally seperated from the simulation unit!
 # 'rename' is the dictionary of the features we want to rename, the key is the original name of the feature, and the value is the new name of the feature
 plot_infos:
-  reslut_file_name : 'output_Pr=7.csv'
+  reslut_file_name : 'out_Pr=7.csv'
   rename: {'inlet_avg_velocity':'InflowSpeed',
         'outlet_avg_temperature':'T_outflow',
         'heatface_avg_temperature':'T_avg_heatsink',
@@ -98,6 +100,6 @@ plot_infos:
         'outlet_avg_pressure':'P_outflow'
         }
   label_feature : 'heatsink'
-  x_feature : 'PumpingPower'
+  x_feature : 'Re'
   y_feature : 'Nu'
-  plot_additional_feature : ['ThermalResistance','Delta_P','h/Delta_P','h','Nu','Pr','PumpingPower','PowerRatio']
+  plot_additional_feature : ['ThermalResistance','massflow','Delta_P','h/Delta_P','h','Nu','Pr','PumpingPower','PowerRatio']
