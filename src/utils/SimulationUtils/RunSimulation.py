@@ -3,6 +3,7 @@ from src.utils.SimulationUtils.auto_fluent import AutoFluent
 import numpy as np
 import src.conf.Parameters as pm
 import src.utils.SimulationUtils.InputEngine as InputEngine
+import logging
 
 def ConcateJOUargs(dct_variable_args):
     lst_key = list(dct_variable_args.keys())
@@ -62,4 +63,19 @@ def RunSimulation():
         
         GenJou(fluent, lst_dct_simulation_variables_of_single_case)
         print(' ###########################################  Simulation  ###########################################\n\n')
+        # 配置日志记录
+        logging.basicConfig(filename='simulation.log', filemode='w', level=logging.INFO, 
+                            format='%(asctime)s - %(levelname)s - %(message)s')
+
+        # 记录仿真开始的信息
+        logging.info('Simulation started')
+        logging.info('Simulation variables: %s' % pm.simulation_variables)
+        
+        # 运行仿真
         fluent.runSim_beta(pm.core_number, pm.os_name, pm.fluent_path)
+        
+        logging.info('Simulation run completed')
+        logging.info('Core number: %s, OS name: %s, Fluent path: %s' % (pm.core_number, pm.os_name, pm.fluent_path))
+
+        # 记录仿真结束的信息
+        logging.info('Simulation ended.')
