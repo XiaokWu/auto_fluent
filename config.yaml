@@ -3,12 +3,28 @@
 # The name of the simulation, which will be used as the name of the folder to store every file related to the simulation.
 simulation_name : 'test_beta'
 
+run_on_mutiple_nodes : True
+
+given_node:
+  run_on_given_node : True
+  node_name : ['node7','node9']
+
+nodeset:
+  expecting_number_of_node: 3
+
+  minium_avaliable_CPU_usage : 90
+
+  Pirority_node : ['node7','node9']
+
+  avoid_node : ['node4','node8']
+
+
 #The simualtion is on server or not
 on_server : True
 #The program is running on the virtual environment or not
 on_venv : True
 #Number of cores you want to use in the simulation
-core_number : 1
+core_number : 90
 #system type
 os_name : 'linux'
 #path to fluent
@@ -16,18 +32,18 @@ fluent_path : '/data/APP/ansys_inc/v195/fluent/bin/fluent'
 #plot on server or not
 plot_on_server : True
 #if only dataprocessing is needed, set it to True will skip the simulation part, default is False.
-dataprocessing_only : True
+dataprocessing_only : False
 #if only ploting is needed, set it to True will skip the simulation and dataprocessing part, default is False.
-plot_only : True
+plot_only : False
 #extracting mode, if it is True, the program will extract the data from the original fluent case, otherwise, it will not extract the data from the fluent file. If this mode is True, the simulation will not be run. 
 extracting_mode : False
 
 # relative path to related folders. Normally not need to be modified by the user.
 folders:
   mesh_folder : 'mesh'
-  ini_case_folder : '../ini_case'
+  ini_case_folder : '../iniCase'
   jou_folder : "jurnal"
-  result_folder : 'result'
+  result_folder : 'hs_3_d=1_pr=7'
   output_folder : 'outputs'
   case_folder : 'case'
 
@@ -44,13 +60,13 @@ folders:
 # NOTE: every elemeny in the lst will go through the simulation, which means the number of simulation will be the product of the length of every lst. The program will generate every possible combination of the parameters in the lsts.
 
 simulation_variables:
-  case : ['Pr_7']
-  heatflux : [100]
-  fluid : ['air']
-  Re : [1]
+  case : ['1_Pr_70']
+  heatflux : [100000]
+  fluid : ['gasoil']
+  Re : [100,200,300,400,500,600,700,800,900,1000]
   massflow : []
   tem : []
-  pressure : [1]
+  pressure : []
 
 # Following parameters are related to the simulation, which are the parameters we need to set in the simulation：
 
@@ -61,7 +77,7 @@ simulation_variables:
 # 'pressure_bc_facename' is the name of the faces you want to set the pressure boundary condition, such as 'inlet', 'outlet', etc.
 simluation_parameters:
   energy_on : True
-  iterate : 500
+  iterate : 5
   velocity_bc_facesname : ['inlet']
   heat_bc_facesname : ['heatface'] 
   pressure_bc_facename : []
@@ -90,7 +106,7 @@ geometry:
 # The ploting unit is totally seperated from the simulation unit!
 # 'rename' is the dictionary of the features we want to rename, the key is the original name of the feature, and the value is the new name of the feature
 plot_infos:
-  reslut_file_name : 'out_Pr=7.csv'
+  reslut_file_name : 'hs_3_out_Pr=7.csv'
   rename: {'inlet_avg_velocity':'InflowSpeed',
         'outlet_avg_temperature':'T_outflow',
         'heatface_avg_temperature':'T_avg_heatsink',
@@ -100,6 +116,6 @@ plot_infos:
         'outlet_avg_pressure':'P_outflow'
         }
   label_feature : 'heatsink'
-  x_feature : 'Re'
+  x_feature : 'Delta_P'
   y_feature : 'Nu'
   plot_additional_feature : ['ThermalResistance','massflow','Delta_P','h/Delta_P','h','Nu','Pr','PumpingPower','PowerRatio']

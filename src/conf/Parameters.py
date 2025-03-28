@@ -1,10 +1,23 @@
 import yaml
 from collections import OrderedDict
 
-with open('config.yaml', 'r') as file:
+with open('config.yaml', 'r', encoding='utf-8') as file:
     config = yaml.safe_load(file)
 
 simulation_name = config['simulation_name']
+
+run_on_mutiple_nodes = config['run_on_mutiple_nodes']
+
+given_node_mode = config['given_node']
+run_on_given_node = given_node_mode['run_on_given_node']
+given_node_name = given_node_mode['node_name']
+
+nodeset_mode = config['nodeset']
+exp_num_nodes = nodeset_mode['expecting_number_of_node']
+pirority_node = nodeset_mode['Pirority_node']
+avoid_node = nodeset_mode['avoid_node']
+minium_avaliable_CPU_usage = nodeset_mode['minium_avaliable_CPU_usage']
+
 on_server = config['on_server']
 on_venv = config['on_venv']
 core_number = config['core_number']

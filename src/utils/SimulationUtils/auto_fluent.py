@@ -450,16 +450,21 @@ class AutoFluent:
             self.autofluent = autofluent
                   
             
-        def joural_gen_beta(self, sim_name, dct_sim_args, dct_result_data):
-            ini_case = os.path.join(self.autofluent.ini_case_folder,f'{dct_sim_args["case"]}.cas.h5')
+        def joural_gen_beta(self, sim_name, dct_sim_args, dct_result_data, def_path = True):
+            file_name = sim_name+'.jou'
+            if def_path == True:
+                file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.jou_folder, file_name)
+                ini_case = os.path.join(self.autofluent.ini_case_folder,f'{dct_sim_args["case"]}.cas.h5').replace('\\', '/')
+            else:
+                file_path = os.path.join('journal', file_name)
+                ini_case = os.path.join(self.autofluent.ini_case_folder.replace('../', ''),f'{dct_sim_args["case"]}.cas.h5').replace('\\', '/')
             dct_sim_args = {**{"ini_case": ini_case}, **dct_sim_args}
             # dct_sim_args = dct_sim_args_new.copy()
-            file_name = sim_name+'.jou'
-            case_file_path = os.path.join(self.autofluent.case_folder,sim_name)
+            case_file_path = os.path.join(self.autofluent.case_folder,sim_name).replace('\\', '/')
             result_file_case = f"{sim_name}.csv"
             lst_surface = dct_result_data['lst_surface']
             lst_data = dct_result_data['lst_data']
-            result_file_path = os.path.join(self.autofluent.result_folder, result_file_case)
+            result_file_path = os.path.join(self.autofluent.result_folder, result_file_case).replace('\\', '/')
             lst_result_args = [result_file_path, lst_surface, lst_data]
             result_dct = {
                     'write_case': case_file_path,
@@ -468,10 +473,7 @@ class AutoFluent:
             del dct_sim_args['case']
             dct_args = {**dct_sim_args, **result_dct}
             jul = fluent_tui.creat_jou(dct_args)
-            file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.jou_folder, file_name)
-            with open(file_path, 'w') as file:
-                file.write(jul)
-            print(f"journal文件已生成到 {file_path}。")
+            self.write_journal(jul, file_path)
             
         def runSim_beta(self, core_num, os_name, fluent_path = None):
             os.chdir(self.autofluent.simulation_name)
@@ -511,7 +513,7 @@ class AutoFluent:
             #self.autofluent.clear_folder(self.autofluent.jou_folder)
 
         
-        def joural_gen_case(self, case_name, flow_variable, dct_sim_para, dct_result_data):
+        def joural_gen_case(self, case_name, flow_variable, dct_sim_para, dct_result_data, path = None):
             for case in case_name:
                 ini_case = os.path.join(self.autofluent.ini_case_folder,f'{case}.cas.h5')
                 for flow in flow_variable:
@@ -522,9 +524,9 @@ class AutoFluent:
                         # 构建jou文件
                         file_name = f"case_{case},{flow['name']}={flow_para}.jou"
                         case_name = f"case_{case},{flow['name']}={flow_para}"
-                        case_file_path = os.path.join(self.autofluent.case_folder,case_name)
+                        case_file_path = os.path.join(self.autofluent.case_folder,case_name).replace('\\', '/')
                         result_file_case = f"case_{case},{flow['name']}={flow_para}.csv"
-                        result_file_path = os.path.join(self.autofluent.result_folder, result_file_case)
+                        result_file_path = os.path.join(self.autofluent.result_folder, result_file_case).replace('\\', '/')
                         lst_heatflux_args = [100000, ['heatface']]
                         lst_velocity_args = [velocity, ['inlet']]
                         lst_surface = dct_result_data['lst_surface']
@@ -540,12 +542,18 @@ class AutoFluent:
                             'write_result': lst_result_args
                         }
                         jul = fluent_tui.creat_jou(dct_para)
-                        file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.jou_folder, file_name)
-                        with open(file_path, 'w') as file:
-                            file.write(jul)
-                        print(f"journal文件已生成到 {file_path} 文件夹中。")
+                        if path == None:
+                            file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.jou_folder, file_name)
+                        else:
+                            file_path = path
+                        self.write_journal(jul, file_path)
                         i+=1
                         
+        @staticmethod
+        def write_journal(journal_content, path):
+            with open(path, 'w') as file:
+                file.write(journal_content)
+            print(f"journal文件已生成到 {path} 文件夹中。")
                         
         def runSim_case(self, flow_variable, case_name, core_num, os_name, fluent_path = None):
             os.chdir(self.autofluent.simulation_name)

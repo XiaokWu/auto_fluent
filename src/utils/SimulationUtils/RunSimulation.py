@@ -1,9 +1,9 @@
-import src.conf.liquids as liq
 from src.utils.SimulationUtils.auto_fluent import AutoFluent
-import numpy as np
 import src.conf.Parameters as pm
 import src.utils.SimulationUtils.InputEngine as InputEngine
+import src.utils.NodeUtils.mutiNodeSimulation as mutiNodeSimulation
 import logging
+
 
 def ConcateJOUargs(dct_variable_args):
     lst_key = list(dct_variable_args.keys())
@@ -26,7 +26,10 @@ def GenJou(fluent, lst_dct_simulation_variables_of_single_case):
         'lst_surface' : pm.output_result_facesname,
         'lst_data' : pm.output_result_dataname
             }
-        fluent.joural_gen_beta(case_name, dct_sim_args, dct_result_data)
+        if pm.run_on_mutiple_nodes:
+            fluent.joural_gen_beta(case_name, dct_sim_args, dct_result_data, def_path = False)
+        else:
+            fluent.joural_gen_beta(case_name, dct_sim_args, dct_result_data)
     
 
 def simualtionIsRun():
@@ -34,6 +37,7 @@ def simualtionIsRun():
         return False
     else:    
         return True
+    
     
 def RunSimulation():
     if simualtionIsRun():
@@ -60,7 +64,7 @@ def RunSimulation():
         lst_dct_simulation_variables_of_single_case = InputEngine.distingush_sim_variable(lst_dct_simulation_variables_of_single_case)
         
         
-        
+
         GenJou(fluent, lst_dct_simulation_variables_of_single_case)
         print(' ###########################################  Simulation  ###########################################\n\n')
         # 配置日志记录
@@ -72,10 +76,11 @@ def RunSimulation():
         logging.info('Simulation variables: %s' % pm.simulation_variables)
         
         # 运行仿真
-        fluent.runSim_beta(pm.core_number, pm.os_name, pm.fluent_path)
-        
-        logging.info('Simulation run completed')
+        if pm.run_on_mutiple_nodes:
+            mutiNodeSimulation.simulation()
+        else:
+            fluent.runSim_beta(pm.core_number, pm.os_name, pm.fluent_path)
+    
         logging.info('Core number: %s, OS name: %s, Fluent path: %s' % (pm.core_number, pm.os_name, pm.fluent_path))
 
-        # 记录仿真结束的信息
-        logging.info('Simulation ended.')
+

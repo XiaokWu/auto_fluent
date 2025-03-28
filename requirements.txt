@@ -1,4 +1,0 @@
-PyYaml
-Numpy
-Pandas
-matplotlib

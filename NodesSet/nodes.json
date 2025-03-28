@@ -1,0 +1,10 @@
+{
+    "node_name":{
+            "hostIP": "IP of ssh host",
+            "port": 22,
+            "username": "username of ssh host",
+            "password": "password of ssh host",
+            "working_directory": "your working directory"
+        },
+    "...":"..."
+    }
