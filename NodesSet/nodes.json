@@ -6,5 +6,5 @@
             "password": "password of ssh host",
             "working_directory": "your working directory"
         },
-    "...":"..."
+    "...":"...add more nodes"
     }
