@@ -456,6 +456,7 @@ class AutoFluent:
                 file_path = os.path.join(self.autofluent.simulation_name, self.autofluent.jou_folder, file_name)
                 ini_case = os.path.join(self.autofluent.ini_case_folder,f'{dct_sim_args["case"]}.cas.h5').replace('\\', '/')
             else:
+                os.mkdir('journal')
                 file_path = os.path.join('journal', file_name)
                 ini_case = os.path.join(self.autofluent.ini_case_folder.replace('../', ''),f'{dct_sim_args["case"]}.cas.h5').replace('\\', '/')
             dct_sim_args = {**{"ini_case": ini_case}, **dct_sim_args}
